@@ -2,12 +2,14 @@ package com.tan.iotwfirebase;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.graphics.Canvas;
 import android.util.Log;
 import android.widget.TextView;
 
 import com.github.mikephil.charting.components.MarkerView;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.highlight.Highlight;
+import com.github.mikephil.charting.utils.MPPointF;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -43,7 +45,7 @@ public class MyMarkerView extends MarkerView {
     public void refreshContent(Entry e, Highlight highlight) {
         long currentTimestamp = (int)e.getX() + referenceTimestamp;
 
-        String text = e.getY() + "% at " + getTimedate(currentTimestamp);
+        String text = e.getY() + "°C at " + getTimedate(currentTimestamp);
         Log.d("Iot", "refreshContent: " + e.getY());
         Log.d("Iot", "refreshContent: " + getTimedate(currentTimestamp));
 
@@ -52,15 +54,46 @@ public class MyMarkerView extends MarkerView {
         super.refreshContent(e, highlight);
     }
 
-    public int getXOffset(float xpos) {
-        // this will center the marker-view horizontally
+    private MPPointF mOffset;
+
+    @Override
+    public MPPointF getOffset() {
+
+        if(mOffset == null) {
+            // center the marker horizontally and vertically
+            mOffset = new MPPointF(-(getWidth() / 2), -getHeight());
+        }
+
+        return mOffset;
+    }
+
+    public int getXOffset() {
         return -(getWidth() / 2);
     }
 
-    public int getYOffset(float ypos) {
-        // this will cause the marker-view to be above the selected value
+    public int getYOffset() {
         return -getHeight();
     }
+
+    @Override
+    public void draw(Canvas canvas, float posx, float posy)
+    {
+        // take offsets into consideration
+        posx += getXOffset();
+        posy=0;
+
+        // AVOID OFFSCREEN
+        if(posx<45)
+            posx=45;
+        if(posx>265)
+            posx=265;
+
+        // translate to the correct position and draw
+        canvas.translate(posx, posy);
+        draw(canvas);
+        canvas.translate(-posx, -posy);
+    }
+
 
     private String getTimedate(long timestamp){
 
