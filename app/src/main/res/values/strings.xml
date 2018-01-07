@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">iotW/Firebase</string>
+    <string name="temperature_Text">Temperature :</string>
+    <string name="humidity_text">Humidity :</string>
+    <string name="humidity">Humidity :</string>
+    <string name="loading">Loading...</string>
+    <string name="auto">Auto</string>
+    <string name="on">On</string>
+</resources>
