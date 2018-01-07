@@ -103,6 +103,8 @@ public class MainActivity extends AppCompatActivity {
                     LineDataSet dataSet = new LineDataSet(mEntries, "Temperature");
                     LineData lineData = new LineData(dataSet);
                     lineData.setDrawValues(false);
+                    MyMarkerView myMarkerView= new MyMarkerView(getApplicationContext(), R.layout.my_marker_view_layout, refTimestamp);
+                    tempGraph.setMarker(myMarkerView);
                     tempGraph.setData(lineData);
                     tempGraph.invalidate();
 
