@@ -2,6 +2,7 @@
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main_activity_container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.tan.iotwfirebase.MainActivity">
@@ -85,18 +86,6 @@
         app:layout_constraintStart_toEndOf="@+id/humi_text"
         app:layout_constraintTop_toBottomOf="@+id/temp_display" />
 
-    <!--   <Button
-        android:id="@+id/button4"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:text="Button"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/guideline3"
-        app:layout_constraintStart_toStartOf="@+id/guideline" />-->
-
     <Switch
         android:id="@+id/on_switch"
         android:layout_width="wrap_content"
@@ -109,7 +98,7 @@
         android:textSize="18sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toStartOf="@+id/auto_switch"
-        app:layout_constraintStart_toStartOf="@+id/guideline"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/humi_display" />
 
     <Switch
@@ -117,48 +106,39 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
+        android:layout_marginStart="10dp"
         android:layout_marginTop="16dp"
         android:text="@string/auto"
         android:textAllCaps="false"
         android:textSize="18sp"
         android:textStyle="bold"
-        app:layout_constraintEnd_toStartOf="@+id/guideline3"
+        app:layout_constraintEnd_toStartOf="@+id/setHome"
         app:layout_constraintStart_toEndOf="@+id/on_switch"
-        app:layout_constraintTop_toBottomOf="@+id/humi_display" />
+        app:layout_constraintTop_toBottomOf="@+id/humi_display"
+        android:layout_marginRight="8dp"
+        android:layout_marginLeft="10dp" />
 
     <TextView
         android:id="@+id/led_state"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="24dp"
+        android:layout_marginBottom="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="32dp"
         android:text="@string/loading"
         android:textAlignment="center"
         android:textSize="18sp"
         android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/tempGraph"
         app:layout_constraintEnd_toStartOf="@+id/guideline3"
         app:layout_constraintStart_toStartOf="@+id/guideline"
-        app:layout_constraintTop_toBottomOf="@+id/on_switch" />
-    <!--
-    <com.jjoe64.graphview.GraphView
-        android:id="@+id/temp_graph"
-        android:layout_width="match_parent"
-        android:layout_height="319dp"
-        android:layout_marginEnd="24dp"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="32dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/led_state"
-        app:seriesType="line"/>-->
+        app:layout_constraintTop_toBottomOf="@+id/auto_switch" />
 
     <com.github.mikephil.charting.charts.LineChart
         android:id="@+id/tempGraph"
         android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:layout_height="354dp"
         android:layout_marginBottom="16dp"
         android:layout_marginEnd="16dp"
         android:layout_marginStart="16dp"
@@ -169,5 +149,18 @@
         app:layout_constraintTop_toBottomOf="@+id/led_state">
 
     </com.github.mikephil.charting.charts.LineChart>
+
+    <Button
+        android:id="@+id/setHome"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:text="@string/homebuttonText"
+        android:textSize="12sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/auto_switch"
+        app:layout_constraintTop_toBottomOf="@+id/humi_display"
+        android:layout_marginLeft="8dp" />
 
 </android.support.constraint.ConstraintLayout>

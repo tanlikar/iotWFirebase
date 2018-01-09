@@ -6,4 +6,15 @@
     <string name="loading">Loading...</string>
     <string name="auto">Auto</string>
     <string name="on">On</string>
+
+    <string name="location_updated_message">Location updated</string>
+    <string name="permission_denied">Permissions Denied!</string>
+    <string name="unable_to_find_location">Unable to find location</string>
+
+    <string name="latitude_label">Latitude</string>
+    <string name="longitude_label">Longitude</string>
+    <string name="last_update_time_label">Last location update time</string>
+    <string name="distance">Distance</string>
+    <string name="set_home_location">set home location</string>
+    <string name="homebuttonText">set home location</string>
 </resources>
