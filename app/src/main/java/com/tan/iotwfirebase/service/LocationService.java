@@ -112,6 +112,7 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
         Log.d("Iot", "onCreate homeLocation: " + homeLocation);
         Log.d("Iot", "onCreate homeLocation: " + homeLocation);
 
+        getOnGpsState();
 
     }
 
@@ -285,7 +286,6 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
         mCurrentLocation = location;
         mLastUpdateTime = DateFormat.getTimeInstance().format(new Date());
         updateUI();
-        getOnGpsState();
 
     }
 
