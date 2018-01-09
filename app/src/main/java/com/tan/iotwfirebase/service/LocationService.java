@@ -14,6 +14,11 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.tan.iotwfirebase.R;
 import com.tan.iotwfirebase.Storage.AppPreferences;
 import com.tan.iotwfirebase.Storage.IPreferenceConstants;
@@ -51,8 +56,8 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
     private String mLongitudeLabel;
     private String mLastUpdateTimeLabel;
     private String mDistance;
-
-
+    private Long autoOnGps;
+    private DatabaseReference mDatabaseReference;
 
     /**
      * Time when the location was updated represented as a String.
@@ -87,6 +92,8 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
         newLocation = new Location("Point B");
 
         homeLocation = new Location("Home");
+
+        mDatabaseReference = FirebaseDatabase.getInstance().getReference();
 
         mLatitudeLabel = getString(R.string.latitude_label);
         mLongitudeLabel = getString(R.string.longitude_label);
@@ -278,6 +285,7 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
         mCurrentLocation = location;
         mLastUpdateTime = DateFormat.getTimeInstance().format(new Date());
         updateUI();
+        getOnGpsState();
 
     }
 
@@ -340,9 +348,35 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
         homeLocation.setLongitude(homeLongitude);
 
         homeDistance = newLocation.distanceTo(homeLocation);
+
+
         Log.d("Iot", "getHomeDistance calculated: " + homeDistance);
         Log.d("Iot", "Oncreate homeLatitude :" + homeLatitude);
         Log.d("Iot", "Oncreate homeLongitude :" + homeLongitude);
+
+        try{
+            if(homeDistance <= 5000 && autoOnGps == 1){
+
+                try {
+                    mDatabaseReference.child("led_switch").setValue(1);
+                    Log.d("Iot", "Distance in Range on LED");
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }else if(homeDistance > 5000 && autoOnGps == 1){
+
+                try {
+                    mDatabaseReference.child("led_switch").setValue(0);
+                    Log.d("Iot", "Distance Out of Range on LED");
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
 
         //save current location as home location
         homeCoor.clear();
@@ -356,6 +390,26 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
     @Override
     public IBinder onBind(Intent intent) {
         throw new UnsupportedOperationException("Not yet implemented");
+    }
+
+    private void getOnGpsState(){
+
+        mDatabaseReference.child("autoOnGps").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+
+                if(dataSnapshot.exists()) {
+                    autoOnGps = (long) dataSnapshot.getValue();
+                    Log.d("Iot", "autoOnGps Backgroud : " + autoOnGps);
+
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
     }
 
 }

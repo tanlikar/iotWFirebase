@@ -38,6 +38,8 @@ public interface ILocationConstants {
 
     String LOCATION_homeLocation = "com.tan.iotwfirebase.homeLocation";
 
+    String LOCATION_AutoGpsState = "com.tan.iotwfirebase.AutoGpsState";
+
     /***
      * Request code while asking for permissions
      */

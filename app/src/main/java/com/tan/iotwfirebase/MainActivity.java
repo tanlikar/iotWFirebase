@@ -62,6 +62,7 @@ public class MainActivity extends AppCompatActivity implements ILocationConstant
     TextView ledState;
     Switch mOn;
     Switch mAuto;
+    Switch mAutoGps;
     LineChart tempGraph;
     Button setHome;
 
@@ -71,11 +72,13 @@ public class MainActivity extends AppCompatActivity implements ILocationConstant
     private ArrayList<TempData> mData = new ArrayList<>();
     private Long mHumi;
     private Long mLedState;
+    private Long mAutoState;
     private Long refTimestamp;
     private float homeLatitude;
     private float homeLongitude;
-     private AppPreferences appPreferences;
+    private AppPreferences appPreferences;
     private float homeDistance;
+    private Long autoOnGps;
 
     /**
      * Constant used in the location settings dialog.
@@ -115,6 +118,7 @@ public class MainActivity extends AppCompatActivity implements ILocationConstant
         mAuto = (Switch) findViewById(R.id.auto_switch);
         tempGraph = (LineChart) findViewById(R.id.tempGraph);
         setHome = (Button) findViewById(R.id.setHome);
+        mAutoGps = (Switch) findViewById(R.id.AutoGpsButton);
 
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
 
@@ -123,11 +127,12 @@ public class MainActivity extends AppCompatActivity implements ILocationConstant
 
         appPreferences = new AppPreferences(this);
 
-
+       checkAutoState();
        checkLedState();
        updateHumi();
        updateTemp();
        enableLed();
+       enableAutoOnGps();
        setHome();
 
     }
@@ -230,11 +235,41 @@ public class MainActivity extends AppCompatActivity implements ILocationConstant
                     if (mLedState == 1){
 
                         ledState.setText("LED is ON");
+                        mOn.setChecked(true);
                         Log.d("Iot", "led on");
                     }else{
 
                         ledState.setText("LED is OFF");
+                        mOn.setChecked(false);
                         Log.d("Iot", "led off");
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    private void checkAutoState(){
+
+        mDatabaseReference.child("auto_switch").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+
+                if(dataSnapshot.exists()) {
+                    mAutoState = (Long) dataSnapshot.getValue();
+
+                    if (mAutoState == 1){
+
+                        mAuto.setChecked(true);
+                        Log.d("Iot", "Auto on : on");
+                    }else{
+
+                        mAuto.setChecked(false);
+                        Log.d("Iot", "Auto on : off");
                     }
                 }
             }
@@ -300,6 +335,61 @@ public class MainActivity extends AppCompatActivity implements ILocationConstant
             }
         });
 
+    }
+
+    private void enableAutoOnGps(){
+
+        mAutoGps.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+
+                if(isChecked == true){
+
+                    try {
+                        mDatabaseReference.child("autoOnGps").setValue(1);
+                        Log.d("Iot", "autoOnGps on : " + 1);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }else{
+
+                    try {
+                        mDatabaseReference.child("autoOnGps").setValue(0);
+                        Log.d("Iot", "on : " + 0);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+
+            }
+        });
+
+        mDatabaseReference.child("autoOnGps").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+
+                if(dataSnapshot.exists()) {
+                    autoOnGps = (long) dataSnapshot.getValue();
+
+                    if(autoOnGps == 1){
+
+                        mAutoGps.setChecked(true);
+                        Log.d("Iot", "received AutoOnGps : on");
+                    }else{
+
+                        mAutoGps.setChecked(false);
+                        Log.d("Iot", "received AutoOnGps : off");
+                    }
+
+
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
     }
 
     private void setHome(){
@@ -466,6 +556,9 @@ public class MainActivity extends AppCompatActivity implements ILocationConstant
                 homeDistance = intent.getFloatExtra(LOCATION_homeDistance, 9999);
                 homeLatitude = intent.getBundleExtra(LOCATION_homeLocation).getFloat("latitude", 0);
                 homeLongitude = intent.getBundleExtra(LOCATION_homeLocation).getFloat("longitude", 0);
+
+                //distance from current location to home less than
+
 
                 Log.d("Iot", "homeDistance onReceive :" + homeDistance);
 
