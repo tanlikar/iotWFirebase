@@ -5,8 +5,10 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.IntentSender;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
@@ -26,8 +28,16 @@ import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.formatter.IAxisValueFormatter;
+import com.google.android.gms.common.api.ApiException;
+import com.google.android.gms.common.api.ResolvableApiException;
 import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.location.LocationSettingsRequest;
+import com.google.android.gms.location.LocationSettingsResponse;
+import com.google.android.gms.location.LocationSettingsStatusCodes;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -64,10 +74,13 @@ public class MainActivity extends AppCompatActivity implements ILocationConstant
     private Long refTimestamp;
     private float homeLatitude;
     private float homeLongitude;
-    private LocationService mLocationService = new LocationService();
-    private AppPreferences appPreferences;
+     private AppPreferences appPreferences;
     private float homeDistance;
 
+    /**
+     * Constant used in the location settings dialog.
+     */
+    protected static final int REQUEST_CHECK_SETTINGS = 0x1;
 
     protected static final String TAG = MainActivity.class.getSimpleName();
 
@@ -82,9 +95,10 @@ public class MainActivity extends AppCompatActivity implements ILocationConstant
      * https://github.com/kayvannj/PermissionUtil
      */
     private PermissionUtil.PermissionRequestObject mBothPermissionRequest;
-
-
     private FusedLocationProviderClient mFusedLocationClient;
+    private LocationRequest mLocationRequestHighAccuracy;
+    private LocationRequest mLocationRequestBalanceAccuracy;
+    Task<LocationSettingsResponse> result;
 
 
     @SuppressLint("SetTextI18n")
@@ -300,10 +314,11 @@ public class MainActivity extends AppCompatActivity implements ILocationConstant
 
                     appPreferences.putFloat(PREF_LATITUDE, homeLatitude);
                     appPreferences.putFloat(PREF_LONGITUDE, homeLongitude);
+                    Toast.makeText(MainActivity.this, R.string.Location_set_message, Toast.LENGTH_SHORT).show();
 
                 }catch (Exception e){
 
-                    Toast.makeText(MainActivity.this, "location is not set", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MainActivity.this, R.string.Location_not_set_message, Toast.LENGTH_SHORT).show();
                     Log.e("Iot", "onClick: ", e );
                 }
             }
@@ -322,13 +337,79 @@ public class MainActivity extends AppCompatActivity implements ILocationConstant
         super.onStart();
 
         LocalBroadcastManager.getInstance(this).registerReceiver(locationReceiver, new IntentFilter(LOCATION_ACTION));
+        mLocationRequestHighAccuracy = new LocationRequest();
+        mLocationRequestBalanceAccuracy = new LocationRequest();
 
+        mLocationRequestHighAccuracy.setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY);
+        mLocationRequestBalanceAccuracy.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
 
-        /**
-         * Runtime permissions are required on Android M and above to access User's location
-         */
-        if (AppUtils.hasM() && !(ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED
-                && ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED)) {
+        // Create LocationSettingsRequest object using location request
+        LocationSettingsRequest.Builder builder = new LocationSettingsRequest.Builder();
+        builder.addLocationRequest(mLocationRequestHighAccuracy);
+        builder.addLocationRequest(mLocationRequestBalanceAccuracy);
+        LocationSettingsRequest locationSettingsRequest = builder.build();
+
+        mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
+        result = LocationServices.getSettingsClient(this).checkLocationSettings(locationSettingsRequest);
+
+        result.addOnCompleteListener(new OnCompleteListener<LocationSettingsResponse>() {
+            @Override
+            public void onComplete(@NonNull Task<LocationSettingsResponse> task) {
+
+                try {
+                    LocationSettingsResponse response = task.getResult(ApiException.class);
+                    /**
+                     * Check if Settings->Location is enabled/disabled
+                     * Not app specific permission (location)
+                     * Here I am talking of the scenario where Settings->Location is disabled and user runs the app.
+                     */
+                    // All location settings are satisfied. The client can initialize location
+
+                    /**
+                     * Runtime permissions are required on Android M and above to access User's location
+                     */
+
+                } catch (ApiException exception) {
+
+                    /**
+                     * Go in exception because Settings->Location is disabled.
+                     * First it will Enable Location Services (GPS) then check for run time permission to app.
+                     */
+                    switch (exception.getStatusCode()) {
+                        case LocationSettingsStatusCodes.RESOLUTION_REQUIRED:
+                            // Location settings are not satisfied. But could be fixed by showing the
+                            // user a dialog.
+                            try {
+                                // Cast to a resolvable exception.
+                                ResolvableApiException resolvable = (ResolvableApiException) exception;
+                                // Show the dialog by calling startResolutionForResult(),
+
+                                /**
+                                 * Display enable Enable Location Services (GPS) dialog like Google Map and then
+                                 * check for run time permission to app.
+                                 */
+                                // and check the result in onActivityResult().
+                                resolvable.startResolutionForResult(
+                                        MainActivity.this,
+                                        REQUEST_CHECK_SETTINGS);
+                            } catch (IntentSender.SendIntentException e) {
+                                // Ignore the error.
+                            } catch (ClassCastException e) {
+                                // Ignore, should be an impossible error.
+                            }
+                            break;
+                        case LocationSettingsStatusCodes.SETTINGS_CHANGE_UNAVAILABLE:
+                            // Location settings are not satisfied. However, we have no way to fix the
+                            // settings so we won't show the dialog.
+                            break;
+                    }
+                }
+            }
+        });
+
+        //askPermission & start service
+        if (AppUtils.hasM() && !(ContextCompat.checkSelfPermission(MainActivity.this, android.Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED
+                && ContextCompat.checkSelfPermission(MainActivity.this, android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED)) {
 
             askPermissions();
 
@@ -380,12 +461,13 @@ public class MainActivity extends AppCompatActivity implements ILocationConstant
 
             if (null != intent && intent.getAction().equals(LOCATION_ACTION)) {
 
+                //get data from locationService
                 String locationData = intent.getStringExtra(LOCATION_MESSAGE);
                 homeDistance = intent.getFloatExtra(LOCATION_homeDistance, 9999);
                 homeLatitude = intent.getBundleExtra(LOCATION_homeLocation).getFloat("latitude", 0);
                 homeLongitude = intent.getBundleExtra(LOCATION_homeLocation).getFloat("longitude", 0);
 
-                Log.d("Iot", "homeDistance onReceive" + homeDistance);
+                Log.d("Iot", "homeDistance onReceive :" + homeDistance);
 
             }
         }

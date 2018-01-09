@@ -31,15 +31,8 @@ dependencies {
     implementation 'com.github.PhilJay:MPAndroidChart:v3.0.3'
     compile 'com.google.android.gms:play-services:11.8.0'
     compile 'com.android.support:design:27.0.2'
-    compile 'com.jakewharton:butterknife:8.8.1'
     compile 'com.github.kayvannj:PermissionUtils:1.0.2@aar'
-
-}
-
-allprojects {
-    repositories {
-        maven { url "https://jitpack.io" }
-    }
 }
 
 apply plugin: 'com.google.gms.google-services'
+

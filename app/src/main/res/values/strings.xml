@@ -17,4 +17,7 @@
     <string name="distance">Distance</string>
     <string name="set_home_location">set home location</string>
     <string name="homebuttonText">set home location</string>
+
+    <string name="Location_set_message">Home Location Set</string>
+    <string name="Location_not_set_message">Home Location is not Set</string>
 </resources>

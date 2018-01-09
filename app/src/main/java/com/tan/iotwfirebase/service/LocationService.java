@@ -341,6 +341,8 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
 
         homeDistance = newLocation.distanceTo(homeLocation);
         Log.d("Iot", "getHomeDistance calculated: " + homeDistance);
+        Log.d("Iot", "Oncreate homeLatitude :" + homeLatitude);
+        Log.d("Iot", "Oncreate homeLongitude :" + homeLongitude);
 
         //save current location as home location
         homeCoor.clear();
