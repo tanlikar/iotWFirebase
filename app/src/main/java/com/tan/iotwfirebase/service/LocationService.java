@@ -364,7 +364,7 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-            }else if(homeDistance > 5000 && autoOnGps == 1){
+            }else if(homeDistance > 2000 && autoOnGps == 1){
 
                 try {
                     mDatabaseReference.child("led_switch").setValue(0);
