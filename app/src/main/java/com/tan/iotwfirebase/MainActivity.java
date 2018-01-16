@@ -566,5 +566,11 @@ public class MainActivity extends AppCompatActivity implements ILocationConstant
         }
     }
 
+    @Override
+    public void onBackPressed() {
+
+        super.onBackPressed();
+    }
+
 }
 
