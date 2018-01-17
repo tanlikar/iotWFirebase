@@ -58,6 +58,7 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
     private String mDistance;
     private Long autoOnGps;
     private DatabaseReference mDatabaseReference;
+    private  String sensorNum;
 
     /**
      * Time when the location was updated represented as a String.
@@ -111,6 +112,9 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
         Log.d("Iot", "onCreate Distance: " + distance);
         Log.d("Iot", "onCreate homeLocation: " + homeLocation);
         Log.d("Iot", "onCreate homeLocation: " + homeLocation);
+
+        sensorNum= appPreferences.getString(CHILD_KEY, "");
+        Log.d("Iot", "osensorNUM service: " + sensorNum);
 
         getOnGpsState();
 
@@ -355,19 +359,19 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
         Log.d("Iot", "Oncreate homeLongitude :" + homeLongitude);
 
         try{
-            if(homeDistance <= 5000 && autoOnGps == 1){
+            if(homeDistance <= 1000 && autoOnGps == 1){
 
                 try {
-                    mDatabaseReference.child("led_switch").setValue(1);
+                    mDatabaseReference.child(sensorNum).child("led_switch").setValue(1);
                     Log.d("Iot", "Distance in Range on LED");
 
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-            }else if(homeDistance > 2000 && autoOnGps == 1){
+            }else if(homeDistance > 1000 && autoOnGps == 1){
 
                 try {
-                    mDatabaseReference.child("led_switch").setValue(0);
+                    mDatabaseReference.child(sensorNum).child("led_switch").setValue(0);
                     Log.d("Iot", "Distance Out of Range on LED");
 
                 } catch (Exception e) {
@@ -394,7 +398,7 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
 
     private void getOnGpsState(){
 
-        mDatabaseReference.child("autoOnGps").addValueEventListener(new ValueEventListener() {
+        mDatabaseReference.child(sensorNum).child("autoOnGps").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
 

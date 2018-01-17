@@ -79,6 +79,7 @@ public class MainActivity extends AppCompatActivity implements ILocationConstant
     private AppPreferences appPreferences;
     private float homeDistance;
     private Long autoOnGps;
+    private String sensorNum;
 
     /**
      * Constant used in the location settings dialog.
@@ -127,6 +128,10 @@ public class MainActivity extends AppCompatActivity implements ILocationConstant
 
         appPreferences = new AppPreferences(this);
 
+        sensorNum = getIntent().getStringExtra(CHILD_KEY);
+
+        appPreferences.putString(CHILD_KEY, sensorNum);
+
        checkAutoState();
        checkLedState();
        updateHumi();
@@ -139,7 +144,7 @@ public class MainActivity extends AppCompatActivity implements ILocationConstant
 
     private void updateTemp(){
 
-        tempQuery = mDatabaseReference.child("temperature").orderByChild("timestamp").limitToLast(1000);
+        tempQuery = mDatabaseReference.child(sensorNum).child("temperature").orderByChild("timestamp").limitToLast(1000);
         tempQuery.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
@@ -203,7 +208,7 @@ public class MainActivity extends AppCompatActivity implements ILocationConstant
 
     private void updateHumi(){
 
-        mDatabaseReference.child("humi").addValueEventListener(new ValueEventListener() {
+        mDatabaseReference.child(sensorNum).child("humi").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists()) {
@@ -225,7 +230,7 @@ public class MainActivity extends AppCompatActivity implements ILocationConstant
 
     private void checkLedState(){
 
-        mDatabaseReference.child("led_state").addValueEventListener(new ValueEventListener() {
+        mDatabaseReference.child(sensorNum).child("led_state").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
 
@@ -255,7 +260,7 @@ public class MainActivity extends AppCompatActivity implements ILocationConstant
 
     private void checkAutoState(){
 
-        mDatabaseReference.child("auto_switch").addValueEventListener(new ValueEventListener() {
+        mDatabaseReference.child(sensorNum).child("auto_switch").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
 
@@ -290,7 +295,7 @@ public class MainActivity extends AppCompatActivity implements ILocationConstant
                 if(isChecked == true){
 
                     try {
-                        mDatabaseReference.child("led_switch").setValue(1);
+                        mDatabaseReference.child(sensorNum).child("led_switch").setValue(1);
                         Log.d("Iot", "on : " + 1);
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -298,7 +303,7 @@ public class MainActivity extends AppCompatActivity implements ILocationConstant
                 }else{
 
                     try {
-                        mDatabaseReference.child("led_switch").setValue(0);
+                        mDatabaseReference.child(sensorNum).child("led_switch").setValue(0);
                         Log.d("Iot", "on : " + 0);
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -315,7 +320,7 @@ public class MainActivity extends AppCompatActivity implements ILocationConstant
                 if(isChecked == true){
 
                     try {
-                        mDatabaseReference.child("auto_switch").setValue(1);
+                        mDatabaseReference.child(sensorNum).child("auto_switch").setValue(1);
                         Log.d("Iot", "auto : " + 1);
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -324,7 +329,7 @@ public class MainActivity extends AppCompatActivity implements ILocationConstant
                 }else{
 
                     try {
-                        mDatabaseReference.child("auto_switch").setValue(0);
+                        mDatabaseReference.child(sensorNum).child("auto_switch").setValue(0);
                         Log.d("Iot", "auto : " + 0);
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -346,7 +351,7 @@ public class MainActivity extends AppCompatActivity implements ILocationConstant
                 if(isChecked == true){
 
                     try {
-                        mDatabaseReference.child("autoOnGps").setValue(1);
+                        mDatabaseReference.child(sensorNum).child("autoOnGps").setValue(1);
                         Log.d("Iot", "autoOnGps on : " + 1);
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -354,7 +359,7 @@ public class MainActivity extends AppCompatActivity implements ILocationConstant
                 }else{
 
                     try {
-                        mDatabaseReference.child("autoOnGps").setValue(0);
+                        mDatabaseReference.child(sensorNum).child("autoOnGps").setValue(0);
                         Log.d("Iot", "on : " + 0);
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -364,7 +369,7 @@ public class MainActivity extends AppCompatActivity implements ILocationConstant
             }
         });
 
-        mDatabaseReference.child("autoOnGps").addValueEventListener(new ValueEventListener() {
+        mDatabaseReference.child(sensorNum).child("autoOnGps").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
 

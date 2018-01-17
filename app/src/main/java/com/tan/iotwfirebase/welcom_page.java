@@ -65,6 +65,7 @@ public class welcom_page extends AppCompatActivity implements AbsListView.OnScro
 
                 Intent intent;
                 intent = new Intent(welcom_page.this, MainActivity.class);
+                intent.putExtra(CHILD_KEY, ("sensor" + position));
                 startActivity(intent);
             }
         });
