@@ -36,7 +36,7 @@ public interface ILocationConstants {
 
     String LOCATION_homeDistance = "com.tan.iotwfirebase.distance";
 
-    String LOCATION_homeLocation = "com.tan.iotwfirebase.homeLocation";
+    String LOCATION_CurLocation = "com.tan.iotwfirebase.CurLocation";
 
     String LOCATION_AutoGpsState = "com.tan.iotwfirebase.AutoGpsState";
 

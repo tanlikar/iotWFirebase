@@ -81,7 +81,7 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
     private float homeLatitude;
     private  float homeLongitude;
     private float homeDistance;
-    private Bundle homeCoor = new Bundle();
+    private Bundle CurCoor = new Bundle();
 
     @Override
     public void onCreate() {
@@ -233,7 +233,7 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
         locationIntent.setAction(LOCATION_ACTION);
         locationIntent.putExtra(LOCATION_MESSAGE, sbLocationData);
         locationIntent.putExtra(LOCATION_homeDistance, homeDistance);
-        locationIntent.putExtra(LOCATION_homeLocation, homeCoor);
+        locationIntent.putExtra(LOCATION_CurLocation, CurCoor);
 
         LocalBroadcastManager.getInstance(this).sendBroadcast(locationIntent);
 
@@ -289,6 +289,16 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
     public void onLocationChanged(Location location) {
         mCurrentLocation = location;
         mLastUpdateTime = DateFormat.getTimeInstance().format(new Date());
+
+        //save into bundle and send current location to main activity
+        CurCoor.clear();
+        CurCoor.putFloat("latitude", (float)mCurrentLocation.getLatitude());
+        CurCoor.putFloat("longitude", (float)mCurrentLocation.getLongitude());
+
+        //save current location in shared prefs
+//        appPreferences.putFloat(PREF_CUR_LATITUDE, (float)mCurrentLocation.getLatitude());
+//        appPreferences.putFloat(PREF_CUR_LONGITUDE, (float)mCurrentLocation.getLongitude());
+
         updateUI();
 
     }
@@ -346,8 +356,8 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
         distance = newLocation.distanceTo(oldLocation);
 
         //get homeLocation from phone storage
-        homeLatitude = appPreferences.getFloat(PREF_LATITUDE, 0);
-        homeLongitude = appPreferences.getFloat(PREF_LONGITUDE, 0);
+        homeLatitude = appPreferences.getFloat(PREF_LATITUDE, 9999);
+        homeLongitude = appPreferences.getFloat(PREF_LONGITUDE, 9999);
         homeLocation.setLatitude(homeLatitude);
         homeLocation.setLongitude(homeLongitude);
 
@@ -381,11 +391,6 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
         }catch (Exception e){
             e.printStackTrace();
         }
-
-        //save current location as home location
-        homeCoor.clear();
-        homeCoor.putFloat("latitude", (float)mCurrentLocation.getLatitude());
-        homeCoor.putFloat("longitude", (float)mCurrentLocation.getLongitude());
 
         return distance;
     }

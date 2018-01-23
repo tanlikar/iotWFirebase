@@ -38,6 +38,7 @@ dependencies {
     implementation 'com.github.ksoichiro:android-observablescrollview:1.6.0'
 
     implementation 'com.google.code.gson:gson:2.8.0'
+
 }
 
 repositories {
@@ -45,6 +46,8 @@ repositories {
 }
 
 apply plugin: 'com.google.gms.google-services'
+
+
 
 
 

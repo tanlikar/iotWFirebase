@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <group android:checkableBehavior="single">
+
+        <item
+            android:id="@+id/nav_setHomeLocation"
+            android:icon="@drawable/home_map_marker"
+            android:title="Set Home Location" />
+        <item
+            android:id="@+id/nav_addSensor"
+            android:icon="@drawable/ic_add_circle_outline_black_24dp"
+            android:title="Add Sensor" />
+        <item
+            android:id="@+id/nav_removeSensor"
+            android:icon="@drawable/ic_remove_circle_outline_black_24dp"
+            android:title="Remove Sensor" />
+        <item
+            android:id="@+id/nav_removeAllSensor"
+            android:icon="@drawable/ic_delete_black_24dp"
+            android:title="Remove All Sensor" />
+
+        <item
+            android:id="@+id/nav_help"
+            android:icon="@drawable/ic_help_black_24dp"
+            android:title="Help"/>
+    </group>
+
+   <!-- <item android:title="Communicate">
+        <menu>
+            <item
+                android:id="@+id/nav_share"
+                android:icon="@drawable/ic_menu_share"
+                android:title="Share" />
+            <item
+                android:id="@+id/nav_send"
+                android:icon="@drawable/ic_menu_send"
+                android:title="Send" />
+        </menu>
+    </item>-->
+
+</menu>
