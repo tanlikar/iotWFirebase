@@ -14,6 +14,7 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -22,10 +23,13 @@ import com.google.firebase.database.ValueEventListener;
 import com.tan.iotwfirebase.R;
 import com.tan.iotwfirebase.Storage.AppPreferences;
 import com.tan.iotwfirebase.Storage.IPreferenceConstants;
+import com.tan.iotwfirebase.Storage.TinyDB;
 import com.tan.iotwfirebase.helper.ILocationConstants;
 
 import java.text.DateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 /**
  * Created by tanli on 1/8/2018.
@@ -56,9 +60,11 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
     private String mLongitudeLabel;
     private String mLastUpdateTimeLabel;
     private String mDistance;
-    private Long autoOnGps;
+    private ArrayList<Long> autoOnGps = new ArrayList<>();
     private DatabaseReference mDatabaseReference;
-    private  String sensorNum;
+    private TinyDB mTinyDB;
+    private  ArrayList<String> sensorNum;
+    private final int DISTANCE_TO_ON_LED = 500;
 
     /**
      * Time when the location was updated represented as a String.
@@ -88,6 +94,7 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
         super.onCreate();
 
         appPreferences = new AppPreferences(this);
+        mTinyDB = new TinyDB(this);
 
         oldLocation = new Location("Point A");
         newLocation = new Location("Point B");
@@ -113,7 +120,18 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
         Log.d("Iot", "onCreate homeLocation: " + homeLocation);
         Log.d("Iot", "onCreate homeLocation: " + homeLocation);
 
-        sensorNum= appPreferences.getString(CHILD_KEY, "");
+        //sensorNum= appPreferences.getString(CHILD_KEY, "");
+
+        try {
+            sensorNum = mTinyDB.getListString(PREF_SENSORLIST);
+
+        }catch(Exception e){
+
+            Log.e("Iot", "serviceSensor Error: ",e );
+        }
+
+
+
         Log.d("Iot", "osensorNUM service: " + sensorNum);
 
         getOnGpsState();
@@ -370,26 +388,36 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
         Log.d("Iot", "Oncreate homeLongitude :" + homeLongitude);
 
         try{
-            if(homeDistance <= 1000 && autoOnGps == 1){
+            for(int x = 0; x< autoOnGps.size(); x++) {
 
                 try {
-                    mDatabaseReference.child(sensorNum).child("led_switch").setValue(1);
-                    Log.d("Iot", "Distance in Range on LED");
+                    if (homeDistance <= DISTANCE_TO_ON_LED && autoOnGps.get(x) == 1) {
 
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }else if(homeDistance > 1000 && autoOnGps == 1){
+                        try {
+                            //currently only can on led for on sensor only
 
-                try {
-                    mDatabaseReference.child(sensorNum).child("led_switch").setValue(0);
-                    Log.d("Iot", "Distance Out of Range on LED");
+                            mDatabaseReference.child("led_switch").child(sensorNum.get(x)).setValue(1);
+                            Log.d("Iot", sensorNum.get(x) + ": Distance in Range on LED");
 
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    } else if (homeDistance > DISTANCE_TO_ON_LED && autoOnGps.get(x) == 1) {
+
+                        try {
+                            mDatabaseReference.child("led_switch").child(sensorNum.get(x)).setValue(0);
+                            Log.d("Iot", sensorNum.get(x) + ": Distance Out of Range on LED");
+
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
         }catch (Exception e){
+
             e.printStackTrace();
         }
 
@@ -404,12 +432,21 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
 
     private void getOnGpsState(){
 
-        mDatabaseReference.child(sensorNum).child("autoOnGps").addValueEventListener(new ValueEventListener() {
+        mDatabaseReference.child("autoOnGps").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
 
                 if(dataSnapshot.exists()) {
-                    autoOnGps = (long) dataSnapshot.getValue();
+
+                    autoOnGps.clear();
+
+                    //currently only get state for only one sensor
+                    //TODO include for all sensor
+                    for(DataSnapshot ds : dataSnapshot.getChildren()) {
+
+                        autoOnGps.add((Long) ds.getValue());
+                    }
+
                     Log.d("Iot", "autoOnGps Backgroud : " + autoOnGps);
 
                 }

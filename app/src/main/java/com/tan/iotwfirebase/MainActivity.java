@@ -178,7 +178,7 @@ public class MainActivity extends AppCompatActivity implements  IPreferenceConst
 
     private void checkLedState(){
 
-        mDatabaseReference.child(sensorNum).child("led_switch").addValueEventListener(new ValueEventListener() {
+        mDatabaseReference.child("led_switch").child(sensorNum).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
 
@@ -206,7 +206,7 @@ public class MainActivity extends AppCompatActivity implements  IPreferenceConst
 
     private void checkAutoState(){
 
-        mDatabaseReference.child(sensorNum).child("auto_switch").addValueEventListener(new ValueEventListener() {
+        mDatabaseReference.child("auto_switch").child(sensorNum).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
 
@@ -241,7 +241,7 @@ public class MainActivity extends AppCompatActivity implements  IPreferenceConst
                 if(isChecked == true){
 
                     try {
-                        mDatabaseReference.child(sensorNum).child("led_switch").setValue(1);
+                        mDatabaseReference.child("led_switch").child(sensorNum).setValue(1);
                         Log.d("Iot", "on : " + 1);
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -249,7 +249,7 @@ public class MainActivity extends AppCompatActivity implements  IPreferenceConst
                 }else{
 
                     try {
-                        mDatabaseReference.child(sensorNum).child("led_switch").setValue(0);
+                        mDatabaseReference.child("led_switch").child(sensorNum).setValue(0);
                         Log.d("Iot", "on : " + 0);
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -266,7 +266,7 @@ public class MainActivity extends AppCompatActivity implements  IPreferenceConst
                 if(isChecked == true){
 
                     try {
-                        mDatabaseReference.child(sensorNum).child("auto_switch").setValue(1);
+                        mDatabaseReference.child("auto_switch").child(sensorNum).setValue(1);
                         Log.d("Iot", "auto : " + 1);
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -275,7 +275,7 @@ public class MainActivity extends AppCompatActivity implements  IPreferenceConst
                 }else{
 
                     try {
-                        mDatabaseReference.child(sensorNum).child("auto_switch").setValue(0);
+                        mDatabaseReference.child("auto_switch").child(sensorNum).setValue(0);
                         Log.d("Iot", "auto : " + 0);
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -297,7 +297,7 @@ public class MainActivity extends AppCompatActivity implements  IPreferenceConst
                 if(isChecked == true){
 
                     try {
-                        mDatabaseReference.child(sensorNum).child("autoOnGps").setValue(1);
+                        mDatabaseReference.child("autoOnGps").child(sensorNum).setValue(1);
                         Log.d("Iot", "autoOnGps on : " + 1);
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -305,7 +305,7 @@ public class MainActivity extends AppCompatActivity implements  IPreferenceConst
                 }else{
 
                     try {
-                        mDatabaseReference.child(sensorNum).child("autoOnGps").setValue(0);
+                        mDatabaseReference.child("autoOnGps").child(sensorNum).setValue(0);
                         Log.d("Iot", "on : " + 0);
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -315,7 +315,7 @@ public class MainActivity extends AppCompatActivity implements  IPreferenceConst
             }
         });
 
-        mDatabaseReference.child(sensorNum).child("autoOnGps").addValueEventListener(new ValueEventListener() {
+        mDatabaseReference.child("autoOnGps").child(sensorNum).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
 

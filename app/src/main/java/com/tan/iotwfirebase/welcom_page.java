@@ -177,10 +177,6 @@ public class welcom_page extends AppCompatActivity implements ILocationConstants
             Log.e("Iot", "initList: ",e );
         }
 
-
-       /* if(sensorList.isEmpty()) {
-            sensorList.add("Sensor 1");
-        }*/
     }
 
     private void slidingMenu(){

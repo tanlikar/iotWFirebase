@@ -14,7 +14,7 @@
     <string name="latitude_label">Latitude</string>
     <string name="longitude_label">Longitude</string>
     <string name="last_update_time_label">Last location update time</string>
-    <string name="distance">Distance</string>
+    <string name="distance">Distance from last geolocation</string>
     <string name="set_home_location">set home location</string>
     <string name="homebuttonText">set home location</string>
 
