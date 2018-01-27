@@ -140,7 +140,7 @@ public class welcom_page extends AppCompatActivity implements ILocationConstants
 
                 Intent intent;
                 intent = new Intent(welcom_page.this, MainActivity.class);
-                intent.putExtra(CHILD_KEY, ("sensor" + position));
+                intent.putExtra(CHILD_KEY, (sensorList.get(position - 1)));
                 startActivity(intent);
             }
         });
@@ -177,9 +177,10 @@ public class welcom_page extends AppCompatActivity implements ILocationConstants
             Log.e("Iot", "initList: ",e );
         }
 
-        if(sensorList.isEmpty()) {
+
+       /* if(sensorList.isEmpty()) {
             sensorList.add("Sensor 1");
-        }
+        }*/
     }
 
     private void slidingMenu(){
@@ -234,6 +235,10 @@ public class welcom_page extends AppCompatActivity implements ILocationConstants
 
         if (id == R.id.nav_removeAllSensor) {
 
+            sensorList.clear();
+            prefs.putListString(PREF_SENSORLIST, sensorList);
+            Toast.makeText(welcom_page.this, "Sensors Removed", Toast.LENGTH_SHORT).show();
+            adapter.notifyDataSetChanged();
 
         } else if (id == R.id.nav_setHomeLocation) {
 
@@ -255,7 +260,7 @@ public class welcom_page extends AppCompatActivity implements ILocationConstants
 
         } else if (id == R.id.nav_addSensor) {
 
-            sensorList.add("Sensor" + (sensorList.size() + 1) );
+            sensorList.add("Sensor " + (sensorList.size() + 1) );
             Log.d("Iot", "onClickFloating: " + sensorList.toString());
             prefs.putListString(PREF_SENSORLIST, sensorList);
             Toast.makeText(welcom_page.this, "Sensor Added", Toast.LENGTH_SHORT).show();

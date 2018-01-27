@@ -216,7 +216,8 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
 
         } else {
 
-            Toast.makeText(this, R.string.unable_to_find_location, Toast.LENGTH_SHORT).show();
+            //TODO add notification instead of toast
+            //Toast.makeText(this, R.string.unable_to_find_location, Toast.LENGTH_SHORT).show();
         }
     }
 
