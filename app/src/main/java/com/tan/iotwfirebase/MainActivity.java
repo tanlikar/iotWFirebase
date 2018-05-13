@@ -99,7 +99,7 @@ public class MainActivity extends AppCompatActivity implements  IPreferenceConst
 
                 if(dataSnapshot.exists()) {
                     mData.add(dataSnapshot.getValue(TempData.class));
-                    disTemp.setText(mData.get(mData.size()-1).getTemp().toString() + "°C");
+                    disTemp.setText(String.format("%s°C", mData.get(mData.size() - 1).getTemp().toString()));
 
                     //graphing
                     ArrayList<Entry> mEntries = new ArrayList<Entry>();
