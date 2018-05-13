@@ -1,7 +1,9 @@
 package com.tan.iotwfirebase;
 
 import android.annotation.SuppressLint;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -26,6 +28,7 @@ import com.tan.iotwfirebase.Storage.AppPreferences;
 import com.tan.iotwfirebase.Storage.IPreferenceConstants;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 
 public class MainActivity extends AppCompatActivity implements  IPreferenceConstants {
@@ -46,11 +49,11 @@ public class MainActivity extends AppCompatActivity implements  IPreferenceConst
     private Long mLedState;
     private Long mAutoState;
     private Long refTimestamp;
-    private AppPreferences appPreferences;
     private Long autoOnGps;
     private String sensorNum;
 
 
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @SuppressLint("SetTextI18n")
     @Override
     protected void  onCreate(Bundle savedInstanceState) {
@@ -69,13 +72,13 @@ public class MainActivity extends AppCompatActivity implements  IPreferenceConst
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_activity_main);
         setSupportActionBar(toolbar);
 
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
 
         mDatabaseReference = FirebaseDatabase.getInstance().getReference();
 
-        appPreferences = new AppPreferences(this);
+        AppPreferences appPreferences = new AppPreferences(this);
 
         sensorNum = getIntent().getStringExtra(CHILD_KEY);
 
@@ -123,6 +126,7 @@ public class MainActivity extends AppCompatActivity implements  IPreferenceConst
                     tempGraph.invalidate();
 
                     //debug
+                    Log.d("check", "onChildAdded: true");
                     Log.d("Iot", mData.get(0).getTemp().toString());
                     Log.d("Iot", "size : " + String.valueOf(mData.size()));
 
@@ -294,7 +298,7 @@ public class MainActivity extends AppCompatActivity implements  IPreferenceConst
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 
-                if(isChecked == true){
+                if(isChecked){
 
                     try {
                         mDatabaseReference.child("autoOnGps").child(sensorNum).setValue(1);

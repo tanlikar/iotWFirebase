@@ -62,7 +62,6 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
     private String mDistance;
     private ArrayList<Long> autoOnGps = new ArrayList<>();
     private DatabaseReference mDatabaseReference;
-    private TinyDB mTinyDB;
     private  ArrayList<String> sensorNum;
     private final int DISTANCE_TO_ON_LED = 500;
 
@@ -94,7 +93,7 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
         super.onCreate();
 
         appPreferences = new AppPreferences(this);
-        mTinyDB = new TinyDB(this);
+        TinyDB tinyDB = new TinyDB(this);
 
         oldLocation = new Location("Point A");
         newLocation = new Location("Point B");
@@ -123,7 +122,7 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
         //sensorNum= appPreferences.getString(CHILD_KEY, "");
 
         try {
-            sensorNum = mTinyDB.getListString(PREF_SENSORLIST);
+            sensorNum = tinyDB.getListString(PREF_SENSORLIST);
 
         }catch(Exception e){
 
@@ -191,7 +190,7 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
             LocationServices.FusedLocationApi.requestLocationUpdates(
                     mGoogleApiClient, mLocationRequest, this);
 
-        } catch (SecurityException ex) {
+        } catch (SecurityException ignored) {
 
 
         }

@@ -171,10 +171,11 @@ public class welcom_page extends AppCompatActivity implements ILocationConstants
         //need to add get arraylist from sharedpref
         try {
             sensorList = prefs.getListString(PREF_SENSORLIST);
+            Log.d("On", String.valueOf(sensorList));
 
         }catch(Exception e){
 
-            Log.e("Iot", "initList: ",e );
+            Log.e("On", "initList: ",e );
         }
 
     }
