@@ -44,7 +44,9 @@ public class MainActivity extends AppCompatActivity implements  IPreferenceConst
     private DatabaseReference mDatabaseReference;
     private Query tempQuery;
     private TempData tempData = new TempData();
+    private HumiData humiData = new HumiData();
     private ArrayList<TempData> mData = new ArrayList<>();
+    private ArrayList<HumiData> mHumiData = new ArrayList<>();
     private Long mHumi;
     private Long mLedState;
     private Long mAutoState;
@@ -160,7 +162,7 @@ public class MainActivity extends AppCompatActivity implements  IPreferenceConst
 
     private void updateHumi(){
 
-        mDatabaseReference.child(sensorNum).child("humi").addValueEventListener(new ValueEventListener() {
+      /*  mDatabaseReference.child(sensorNum).child("humi").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists()) {
@@ -177,6 +179,44 @@ public class MainActivity extends AppCompatActivity implements  IPreferenceConst
 
             }
 
+        });*/
+
+      Query HumiQuery = mDatabaseReference.child(sensorNum).child("humi").orderByChild("timestamp").limitToLast(1000);
+      HumiQuery.addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+
+                if (dataSnapshot.exists()) {
+
+//                    mHumi = (Long) dataSnapshot.getValue();
+//                    Log.d("Iot", "humi = " + mHumi.toString());
+//                    disHumi.setText(String.format("%s %%", mHumi.toString()));
+
+                    mHumiData.add(dataSnapshot.getValue(HumiData.class));
+                    disHumi.setText(String.format("%s %%", mHumiData.get(mHumiData.size() - 1).getHumi().toString()));
+                    Log.d("Iot", "onChildAdded:" + mHumiData.size());
+                }
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
         });
     }
 
