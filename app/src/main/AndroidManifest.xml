@@ -39,7 +39,8 @@
         <activity android:name=".RemoveSensor" />
         <activity android:name=".LED_control" />
         <activity android:name=".HumiGraph" />
-        <activity android:name=".add_sensor"></activity>
+        <activity android:name=".add_sensor" />
+        <activity android:name=".sensor_select"></activity>
     </application>
 
 </manifest>
