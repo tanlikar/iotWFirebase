@@ -64,7 +64,7 @@ public class welcom_page extends AppCompatActivity implements ILocationConstants
 
     private int lastTopValue = 0;
 
-    private ArrayList<String> sensorList  = new ArrayList<>();
+    private ArrayList<String> groupList  = new ArrayList<>();
     private ListView listView;
     private ImageView backgroundImage;
     private ArrayAdapter adapter;
@@ -122,7 +122,7 @@ public class welcom_page extends AppCompatActivity implements ILocationConstants
         initList();
 
         //list adapter
-        adapter = new ArrayAdapter(this, R.layout.list_row, sensorList);
+        adapter = new ArrayAdapter(this, R.layout.list_row, groupList);
         listView.setAdapter(adapter);
 
         // inflate custom header and attach it to the list
@@ -140,7 +140,7 @@ public class welcom_page extends AppCompatActivity implements ILocationConstants
 
                 Intent intent;
                 intent = new Intent(welcom_page.this, MainActivity.class);
-                intent.putExtra(CHILD_KEY, (sensorList.get(position - 1)));
+                intent.putExtra(CHILD_KEY, (groupList.get(position - 1)));
                 startActivity(intent);
             }
         });
@@ -170,8 +170,8 @@ public class welcom_page extends AppCompatActivity implements ILocationConstants
 
         //need to add get arraylist from sharedpref
         try {
-            sensorList = prefs.getListString(PREF_SENSORLIST);
-            Log.d("On", String.valueOf(sensorList));
+            groupList = prefs.getListString(PREF_GROUPLIST);
+            Log.d("On", String.valueOf(groupList));
 
         }catch(Exception e){
 
@@ -230,10 +230,10 @@ public class welcom_page extends AppCompatActivity implements ILocationConstants
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_removeAllSensor) {
+        if (id == R.id.nav_removeAll) {
 
-            sensorList.clear();
-            prefs.putListString(PREF_SENSORLIST, sensorList);
+            groupList.clear();
+            prefs.putListString(PREF_GROUPLIST, groupList);
             Toast.makeText(welcom_page.this, "Sensors Removed", Toast.LENGTH_SHORT).show();
             adapter.notifyDataSetChanged();
 
@@ -255,12 +255,12 @@ public class welcom_page extends AppCompatActivity implements ILocationConstants
 
             }
 
-        } else if (id == R.id.nav_addSensor) {
+        } else if (id == R.id.nav_addGroup) {
 
-            sensorList.add("Sensor " + (sensorList.size() + 1) );
-            Log.d("Iot", "onClickFloating: " + sensorList.toString());
-            prefs.putListString(PREF_SENSORLIST, sensorList);
-            Toast.makeText(welcom_page.this, "Sensor Added", Toast.LENGTH_SHORT).show();
+            groupList.add("Group " + (groupList.size() + 1) );
+            Log.d("Iot", "onClickFloating: " + groupList.toString());
+            prefs.putListString(PREF_GROUPLIST, groupList);
+            Toast.makeText(welcom_page.this, "Group Added", Toast.LENGTH_SHORT).show();
             adapter.notifyDataSetChanged();
 
         } else if (id == R.id.nav_removeSensor) {
@@ -271,6 +271,11 @@ public class welcom_page extends AppCompatActivity implements ILocationConstants
 
         } else if (id == R.id.nav_help) {
 
+        }else if (id == R.id.nav_addSensor){
+
+            Intent intent;
+            intent = new Intent(welcom_page.this, add_sensor.class);
+            startActivity(intent);
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -417,9 +422,9 @@ public class welcom_page extends AppCompatActivity implements ILocationConstants
         super.onResume();
 
         initList();
-        Log.d("Iot", "onResume: " + sensorList);
+        Log.d("Iot", "onResume: " + groupList);
 
-        adapter = new ArrayAdapter(this, R.layout.list_row, sensorList);
+        adapter = new ArrayAdapter(this, R.layout.list_row, groupList);
         listView.setAdapter(adapter);
 
     }

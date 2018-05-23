@@ -8,24 +8,35 @@
         <item
             android:id="@+id/nav_setHomeLocation"
             android:icon="@drawable/home_map_marker"
-            android:title="Set Home Location" />
+            android:title="@string/set_home_location_" />
+        <item
+            android:id="@+id/nav_addGroup"
+            android:icon="@drawable/ic_add_circle_outline_black_24dp"
+            android:title="@string/add_group" />
+
         <item
             android:id="@+id/nav_addSensor"
             android:icon="@drawable/ic_add_circle_outline_black_24dp"
-            android:title="Add Sensor" />
+            android:title="@string/add_sensor" />
+
+        <item
+            android:id="@+id/nav_removeGroup"
+            android:icon="@drawable/ic_remove_circle_outline_black_24dp"
+            android:title="@string/remove_group" />
+
         <item
             android:id="@+id/nav_removeSensor"
             android:icon="@drawable/ic_remove_circle_outline_black_24dp"
-            android:title="Remove Sensor" />
+            android:title="@string/remove_sensor" />
         <item
-            android:id="@+id/nav_removeAllSensor"
+            android:id="@+id/nav_removeAll"
             android:icon="@drawable/ic_delete_black_24dp"
-            android:title="Remove All Sensor" />
+            android:title="@string/remove_all" />
 
         <item
             android:id="@+id/nav_help"
             android:icon="@drawable/ic_help_black_24dp"
-            android:title="Help"/>
+            android:title="@string/help"/>
     </group>
 
    <!-- <item android:title="Communicate">

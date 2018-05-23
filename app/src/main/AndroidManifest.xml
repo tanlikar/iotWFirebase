@@ -14,7 +14,6 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-
         <activity
             android:name=".welcom_page"
             android:screenOrientation="portrait">
@@ -24,11 +23,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity
             android:name=".MainActivity"
             android:screenOrientation="portrait" />
-
 
         <service
             android:name=".service.LocationService"
@@ -40,7 +37,9 @@
             android:value="@integer/google_play_services_version" />
 
         <activity android:name=".RemoveSensor" />
-
+        <activity android:name=".LED_control" />
+        <activity android:name=".HumiGraph" />
+        <activity android:name=".add_sensor"></activity>
     </application>
 
 </manifest>

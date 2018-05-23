@@ -22,8 +22,9 @@ public class RemoveSensor extends AppCompatActivity implements IPreferenceConsta
 
 
     private TinyDB prefs;
-    private ArrayList<String> sensorList  = new ArrayList<>();
+    private ArrayList<String> groupList  = new ArrayList<>();
 
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -33,7 +34,7 @@ public class RemoveSensor extends AppCompatActivity implements IPreferenceConsta
 
         //get existing sensor list
         try {
-            sensorList = prefs.getListString(PREF_SENSORLIST);
+            groupList = prefs.getListString(PREF_GROUPLIST);
 
         }catch(Exception e){
 
@@ -44,7 +45,7 @@ public class RemoveSensor extends AppCompatActivity implements IPreferenceConsta
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_remove_sensor);
         setSupportActionBar(toolbar);
 
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
         final EditText editTextField = (EditText) findViewById(R.id.sensorTBremove_text);
@@ -59,12 +60,12 @@ public class RemoveSensor extends AppCompatActivity implements IPreferenceConsta
 
                     Log.d("Iot", "onEditorAction: " + sensorName);
 
-                    for(int x = 0; x<sensorList.size(); x++){
+                    for(int x = 0; x<groupList.size(); x++){
 
-                        if(sensorName.equals(sensorList.get(x))){
+                        if(sensorName.equals(groupList.get(x))){
 
-                            sensorList.remove(x);
-                            prefs.putListString(PREF_SENSORLIST, sensorList);
+                            groupList.remove(x);
+                            prefs.putListString(PREF_GROUPLIST, groupList);
 
                             Toast.makeText(RemoveSensor.this, sensorName + " Removed", Toast.LENGTH_SHORT).show();
 

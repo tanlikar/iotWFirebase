@@ -35,23 +35,13 @@ public class MainActivity extends AppCompatActivity implements  IPreferenceConst
 
     //variable name
     TextView disTemp;
-    TextView disHumi;
-    Switch mOn;
-    Switch mAuto;
-    Switch mAutoGps;
     LineChart tempGraph;
 
     private DatabaseReference mDatabaseReference;
     private Query tempQuery;
     private TempData tempData = new TempData();
-    private HumiData humiData = new HumiData();
     private ArrayList<TempData> mData = new ArrayList<>();
-    private ArrayList<HumiData> mHumiData = new ArrayList<>();
-    private Long mHumi;
-    private Long mLedState;
-    private Long mAutoState;
     private Long refTimestamp;
-    private Long autoOnGps;
     private String sensorNum;
 
 
@@ -64,11 +54,7 @@ public class MainActivity extends AppCompatActivity implements  IPreferenceConst
 
 
         disTemp = (TextView) findViewById(R.id.temp_display);
-        disHumi = (TextView) findViewById(R.id.humi_display);
-        mOn = (Switch) findViewById(R.id.on_switch);
-        mAuto = (Switch) findViewById(R.id.auto_switch);
         tempGraph = (LineChart) findViewById(R.id.tempGraph);
-        mAutoGps = (Switch) findViewById(R.id.AutoGpsButton);
 
         //back arrow at toolbar
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_activity_main);
@@ -86,12 +72,7 @@ public class MainActivity extends AppCompatActivity implements  IPreferenceConst
 
         appPreferences.putString(CHILD_KEY, sensorNum);
 
-       checkAutoState();
-       checkLedState();
-       updateHumi();
        updateTemp();
-       enableLed();
-       enableAutoOnGps();
 
     }
 
@@ -107,7 +88,7 @@ public class MainActivity extends AppCompatActivity implements  IPreferenceConst
                     disTemp.setText(String.format("%s°C", mData.get(mData.size() - 1).getTemp().toString()));
 
                     //graphing
-                    ArrayList<Entry> mEntries = new ArrayList<Entry>();
+                    ArrayList<Entry> mEntries = new ArrayList<>();
 
                     refTimestamp = mData.get(0).getTimestamp()/1000;
                     IAxisValueFormatter xAxisFormater = new HourAxisValueFormatter(refTimestamp);
@@ -151,233 +132,6 @@ public class MainActivity extends AppCompatActivity implements  IPreferenceConst
             @Override
             public void onChildMoved(DataSnapshot dataSnapshot, String s) {
 
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
-    }
-
-    private void updateHumi(){
-
-      /*  mDatabaseReference.child(sensorNum).child("humi").addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                if (dataSnapshot.exists()) {
-
-                    mHumi = (Long) dataSnapshot.getValue();
-                    Log.d("Iot", "humi = " + mHumi.toString());
-                    disHumi.setText(mHumi.toString() + " %");
-                }
-            }
-
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-
-        });*/
-
-      Query HumiQuery = mDatabaseReference.child(sensorNum).child("humi").orderByChild("timestamp").limitToLast(1000);
-      HumiQuery.addChildEventListener(new ChildEventListener() {
-            @Override
-            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-
-                if (dataSnapshot.exists()) {
-
-//                    mHumi = (Long) dataSnapshot.getValue();
-//                    Log.d("Iot", "humi = " + mHumi.toString());
-//                    disHumi.setText(String.format("%s %%", mHumi.toString()));
-
-                    mHumiData.add(dataSnapshot.getValue(HumiData.class));
-                    disHumi.setText(String.format("%s %%", mHumiData.get(mHumiData.size() - 1).getHumi().toString()));
-                    Log.d("Iot", "onChildAdded:" + mHumiData.size());
-                }
-            }
-
-            @Override
-            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-
-            }
-
-            @Override
-            public void onChildRemoved(DataSnapshot dataSnapshot) {
-
-            }
-
-            @Override
-            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
-    }
-
-    private void checkLedState(){
-
-        mDatabaseReference.child("led_switch").child(sensorNum).addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-
-                if(dataSnapshot.exists()) {
-                    mLedState = (Long) dataSnapshot.getValue();
-
-                    if (mLedState == 1){
-
-                        mOn.setChecked(true);
-                        Log.d("Iot", "led on");
-                    }else{
-
-                        mOn.setChecked(false);
-                        Log.d("Iot", "led off");
-                    }
-                }
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
-    }
-
-    private void checkAutoState(){
-
-        mDatabaseReference.child("auto_switch").child(sensorNum).addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-
-                if(dataSnapshot.exists()) {
-                    mAutoState = (Long) dataSnapshot.getValue();
-
-                    if (mAutoState == 1){
-
-                        mAuto.setChecked(true);
-                        Log.d("Iot", "Auto on : on");
-                    }else{
-
-                        mAuto.setChecked(false);
-                        Log.d("Iot", "Auto on : off");
-                    }
-                }
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
-    }
-
-    private void enableLed(){
-
-        mOn.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-
-                if(isChecked == true){
-
-                    try {
-                        mDatabaseReference.child("led_switch").child(sensorNum).setValue(1);
-                        Log.d("Iot", "on : " + 1);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                }else{
-
-                    try {
-                        mDatabaseReference.child("led_switch").child(sensorNum).setValue(0);
-                        Log.d("Iot", "on : " + 0);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                }
-
-            }
-        });
-
-        mAuto.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-
-                if(isChecked == true){
-
-                    try {
-                        mDatabaseReference.child("auto_switch").child(sensorNum).setValue(1);
-                        Log.d("Iot", "auto : " + 1);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-
-                }else{
-
-                    try {
-                        mDatabaseReference.child("auto_switch").child(sensorNum).setValue(0);
-                        Log.d("Iot", "auto : " + 0);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                }
-
-
-            }
-        });
-
-    }
-
-    private void enableAutoOnGps(){
-
-        mAutoGps.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-
-                if(isChecked){
-
-                    try {
-                        mDatabaseReference.child("autoOnGps").child(sensorNum).setValue(1);
-                        Log.d("Iot", "autoOnGps on : " + 1);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                }else{
-
-                    try {
-                        mDatabaseReference.child("autoOnGps").child(sensorNum).setValue(0);
-                        Log.d("Iot", "on : " + 0);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                }
-
-            }
-        });
-
-        mDatabaseReference.child("autoOnGps").child(sensorNum).addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-
-                if(dataSnapshot.exists()) {
-                    autoOnGps = (long) dataSnapshot.getValue();
-
-                    if(autoOnGps == 1){
-
-                        mAutoGps.setChecked(true);
-                        Log.d("Iot", "received AutoOnGps : on");
-                    }else{
-
-                        mAutoGps.setChecked(false);
-                        Log.d("Iot", "received AutoOnGps : off");
-                    }
-
-
-                }
             }
 
             @Override

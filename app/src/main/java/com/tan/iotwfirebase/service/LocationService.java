@@ -62,7 +62,7 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
     private String mDistance;
     private ArrayList<Long> autoOnGps = new ArrayList<>();
     private DatabaseReference mDatabaseReference;
-    private  ArrayList<String> sensorNum;
+    private  ArrayList<String> groupNum;
     private final int DISTANCE_TO_ON_LED = 500;
 
     /**
@@ -122,7 +122,7 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
         //sensorNum= appPreferences.getString(CHILD_KEY, "");
 
         try {
-            sensorNum = tinyDB.getListString(PREF_SENSORLIST);
+            groupNum = tinyDB.getListString(PREF_GROUPLIST);
 
         }catch(Exception e){
 
@@ -131,7 +131,7 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
 
 
 
-        Log.d("Iot", "osensorNUM service: " + sensorNum);
+        Log.d("Iot", "osensorNUM service: " + groupNum);
 
         getOnGpsState();
 
@@ -395,8 +395,8 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
                         try {
                             //currently only can on led for on sensor only
 
-                            mDatabaseReference.child("led_switch").child(sensorNum.get(x)).setValue(1);
-                            Log.d("Iot", sensorNum.get(x) + ": Distance in Range on LED");
+                            mDatabaseReference.child("led_switch").child(groupNum.get(x)).setValue(1);
+                            Log.d("Iot", groupNum.get(x) + ": Distance in Range on LED");
 
                         } catch (Exception e) {
                             e.printStackTrace();
@@ -404,8 +404,8 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
                     } else if (homeDistance > DISTANCE_TO_ON_LED && autoOnGps.get(x) == 1) {
 
                         try {
-                            mDatabaseReference.child("led_switch").child(sensorNum.get(x)).setValue(0);
-                            Log.d("Iot", sensorNum.get(x) + ": Distance Out of Range on LED");
+                            mDatabaseReference.child("led_switch").child(groupNum.get(x)).setValue(0);
+                            Log.d("Iot", groupNum.get(x) + ": Distance Out of Range on LED");
 
                         } catch (Exception e) {
                             e.printStackTrace();
