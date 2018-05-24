@@ -38,6 +38,7 @@ public class HumiGraph extends AppCompatActivity  implements IPreferenceConstant
     private Long refTimestamp;
     private String sensorNum;
 
+    private ArrayList<String> sensorlist = new ArrayList<>();
     LineChart humiGraph;
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
@@ -50,7 +51,7 @@ public class HumiGraph extends AppCompatActivity  implements IPreferenceConstant
         humiGraph = (LineChart) findViewById(R.id.humiGraph);
 
         //back arrow at toolbar
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_activity_main);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_activity_humi);
         setSupportActionBar(toolbar);
 
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
@@ -59,18 +60,18 @@ public class HumiGraph extends AppCompatActivity  implements IPreferenceConstant
 
         mDatabaseReference = FirebaseDatabase.getInstance().getReference();
 
-        AppPreferences appPreferences = new AppPreferences(this);
+       // AppPreferences appPreferences = new AppPreferences(this);
 
-        sensorNum = getIntent().getStringExtra(CHILD_KEY);
+        sensorlist = getIntent().getStringArrayListExtra(CHILD_KEY);
 
-        appPreferences.putString(CHILD_KEY, sensorNum);
+       // appPreferences.putString(CHILD_KEY, sensorNum);
 
         updateHumi();
     }
 
     private void updateHumi(){
 
-        Query HumiQuery = mDatabaseReference.child(sensorNum).child("humi").orderByChild("timestamp").limitToLast(1000);
+        Query HumiQuery = mDatabaseReference.child(sensorlist.get(0)).child(sensorlist.get(1)).child("humi").orderByChild("timestamp").limitToLast(1000);
         HumiQuery.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {

@@ -139,8 +139,9 @@ public class welcom_page extends AppCompatActivity implements ILocationConstants
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
                 Intent intent;
-                intent = new Intent(welcom_page.this, MainActivity.class);
-                intent.putExtra(CHILD_KEY, (groupList.get(position - 1)));
+                intent = new Intent(welcom_page.this, sensor_select.class);
+                intent.putExtra(CHILD_KEY, parent.getItemAtPosition(position).toString());
+                Log.d("parent", "onItemClick: " + parent.getItemAtPosition(position).toString());
                 startActivity(intent);
             }
         });
@@ -263,7 +264,7 @@ public class welcom_page extends AppCompatActivity implements ILocationConstants
             Toast.makeText(welcom_page.this, "Group Added", Toast.LENGTH_SHORT).show();
             adapter.notifyDataSetChanged();
 
-        } else if (id == R.id.nav_removeSensor) {
+        } else if (id == R.id.nav_removeGroup) {
 
             Intent intent;
             intent = new Intent(welcom_page.this, RemoveSensor.class);

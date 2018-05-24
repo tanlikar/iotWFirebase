@@ -30,7 +30,7 @@ import com.tan.iotwfirebase.Storage.IPreferenceConstants;
 import java.util.ArrayList;
 import java.util.Objects;
 
-
+//tempGraph
 public class MainActivity extends AppCompatActivity implements  IPreferenceConstants {
 
     //variable name
@@ -42,7 +42,7 @@ public class MainActivity extends AppCompatActivity implements  IPreferenceConst
     private TempData tempData = new TempData();
     private ArrayList<TempData> mData = new ArrayList<>();
     private Long refTimestamp;
-    private String sensorNum;
+    private ArrayList<String> sensorlist = new ArrayList<>();
 
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
@@ -66,11 +66,12 @@ public class MainActivity extends AppCompatActivity implements  IPreferenceConst
 
         mDatabaseReference = FirebaseDatabase.getInstance().getReference();
 
-        AppPreferences appPreferences = new AppPreferences(this);
+        //AppPreferences appPreferences = new AppPreferences(this);
 
-        sensorNum = getIntent().getStringExtra(CHILD_KEY);
 
-        appPreferences.putString(CHILD_KEY, sensorNum);
+        sensorlist = getIntent().getStringArrayListExtra(CHILD_KEY);
+
+        //appPreferences.putString(CHILD_KEY, sensorNum);
 
        updateTemp();
 
@@ -78,7 +79,7 @@ public class MainActivity extends AppCompatActivity implements  IPreferenceConst
 
     private void updateTemp(){
 
-        tempQuery = mDatabaseReference.child(sensorNum).child("temperature").orderByChild("timestamp").limitToLast(1000);
+        tempQuery = mDatabaseReference.child(sensorlist.get(0)).child(sensorlist.get(1)).child("temperature").orderByChild("timestamp").limitToLast(1000);
         tempQuery.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {

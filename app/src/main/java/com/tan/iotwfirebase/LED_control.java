@@ -17,6 +17,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.tan.iotwfirebase.Storage.AppPreferences;
 import com.tan.iotwfirebase.Storage.IPreferenceConstants;
 
+import java.util.ArrayList;
 import java.util.Objects;
 
 public class LED_control extends AppCompatActivity implements IPreferenceConstants {
@@ -29,7 +30,7 @@ public class LED_control extends AppCompatActivity implements IPreferenceConstan
     private Long mAutoState;
     private DatabaseReference mDatabaseReference;
     private Long autoOnGps;
-    private String sensorNum;
+    private String groupNum;
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override
@@ -52,9 +53,11 @@ public class LED_control extends AppCompatActivity implements IPreferenceConstan
 
         AppPreferences appPreferences = new AppPreferences(this);
 
-        sensorNum = getIntent().getStringExtra(CHILD_KEY);
+        ArrayList<String> sensorchild = getIntent().getStringArrayListExtra(CHILD_KEY);
+        groupNum = sensorchild.get(0);
 
-        appPreferences.putString(CHILD_KEY, sensorNum);
+        //for autogps
+        appPreferences.putString(CHILD_KEY, groupNum);
 
         enableLed();
         enableAutoOnGps();
@@ -65,7 +68,7 @@ public class LED_control extends AppCompatActivity implements IPreferenceConstan
 
     private void checkLedState(){
 
-        mDatabaseReference.child("led_switch").child(sensorNum).addValueEventListener(new ValueEventListener() {
+        mDatabaseReference.child("led_switch").child(groupNum).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
 
@@ -93,7 +96,7 @@ public class LED_control extends AppCompatActivity implements IPreferenceConstan
 
     private void checkAutoState(){
 
-        mDatabaseReference.child("auto_switch").child(sensorNum).addValueEventListener(new ValueEventListener() {
+        mDatabaseReference.child("auto_switch").child(groupNum).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
 
@@ -128,7 +131,7 @@ public class LED_control extends AppCompatActivity implements IPreferenceConstan
                 if(isChecked){
 
                     try {
-                        mDatabaseReference.child("led_switch").child(sensorNum).setValue(1);
+                        mDatabaseReference.child("led_switch").child(groupNum).setValue(1);
                         Log.d("Iot", "on : " + 1);
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -136,7 +139,7 @@ public class LED_control extends AppCompatActivity implements IPreferenceConstan
                 }else{
 
                     try {
-                        mDatabaseReference.child("led_switch").child(sensorNum).setValue(0);
+                        mDatabaseReference.child("led_switch").child(groupNum).setValue(0);
                         Log.d("Iot", "on : " + 0);
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -153,7 +156,7 @@ public class LED_control extends AppCompatActivity implements IPreferenceConstan
                 if(isChecked){
 
                     try {
-                        mDatabaseReference.child("auto_switch").child(sensorNum).setValue(1);
+                        mDatabaseReference.child("auto_switch").child(groupNum).setValue(1);
                         Log.d("Iot", "auto : " + 1);
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -162,7 +165,7 @@ public class LED_control extends AppCompatActivity implements IPreferenceConstan
                 }else{
 
                     try {
-                        mDatabaseReference.child("auto_switch").child(sensorNum).setValue(0);
+                        mDatabaseReference.child("auto_switch").child(groupNum).setValue(0);
                         Log.d("Iot", "auto : " + 0);
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -184,7 +187,7 @@ public class LED_control extends AppCompatActivity implements IPreferenceConstan
                 if(isChecked){
 
                     try {
-                        mDatabaseReference.child("autoOnGps").child(sensorNum).setValue(1);
+                        mDatabaseReference.child("autoOnGps").child(groupNum).setValue(1);
                         Log.d("Iot", "autoOnGps on : " + 1);
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -192,7 +195,7 @@ public class LED_control extends AppCompatActivity implements IPreferenceConstan
                 }else{
 
                     try {
-                        mDatabaseReference.child("autoOnGps").child(sensorNum).setValue(0);
+                        mDatabaseReference.child("autoOnGps").child(groupNum).setValue(0);
                         Log.d("Iot", "on : " + 0);
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -202,7 +205,7 @@ public class LED_control extends AppCompatActivity implements IPreferenceConstan
             }
         });
 
-        mDatabaseReference.child("autoOnGps").child(sensorNum).addValueEventListener(new ValueEventListener() {
+        mDatabaseReference.child("autoOnGps").child(groupNum).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
 
