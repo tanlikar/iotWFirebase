@@ -11,6 +11,7 @@ public interface IPreferenceConstants {
     String PREF_LONGITUDE = "home_longitude";
     String PREF_GROUPLIST = "groupList";
     String CHILD_KEY = "sensorNum";
+    String GPS_CHILD_KEY = "gpschild";
     String PREF_CUR_LATITUDE = "curr_latitude";
     String PREF_CUR_LONGITUDE = "curr_longitude";
 

@@ -74,21 +74,21 @@ public class sensor_select extends AppCompatActivity implements IPreferenceConst
                if(split[0].equals(TEMPCILD)){
 
                    intent = new Intent(sensor_select.this, MainActivity.class);
-                   childList.add(TEMPCILD);
+                   childList.add(parent.getItemAtPosition(position).toString());
                    intent.putStringArrayListExtra(CHILD_KEY, childList);
                    startActivity(intent);
 
                }else  if (split[0].equals(HUMICHILD)){
 
                    intent = new Intent(sensor_select.this, HumiGraph.class);
-                   childList.add(HUMICHILD);
+                   childList.add(parent.getItemAtPosition(position).toString());
                    intent.putStringArrayListExtra(CHILD_KEY, childList);
                    startActivity(intent);
 
                } else if (split[0].equals(CONTROLCHILD)){
 
                    intent = new Intent(sensor_select.this, LED_control.class);
-                   childList.add(CONTROLCHILD);
+                   childList.add(parent.getItemAtPosition(position).toString());
                    intent.putStringArrayListExtra(CHILD_KEY, childList);
                    startActivity(intent);
                }

@@ -19,7 +19,7 @@ public class HumiData {
         this.humi = humi;
     }
 
-    public Long getHumiTimestamp() {
+    public Long getTimestamp() {
         return timestamp;
     }
 

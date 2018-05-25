@@ -60,7 +60,7 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
     private String mLongitudeLabel;
     private String mLastUpdateTimeLabel;
     private String mDistance;
-    private ArrayList<Long> autoOnGps = new ArrayList<>();
+    private Long autoOnGps;
     private DatabaseReference mDatabaseReference;
     private  ArrayList<String> groupNum;
     private final int DISTANCE_TO_ON_LED = 500;
@@ -87,13 +87,14 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
     private  float homeLongitude;
     private float homeDistance;
     private Bundle CurCoor = new Bundle();
+    private TinyDB tinyDB;
 
     @Override
     public void onCreate() {
         super.onCreate();
 
         appPreferences = new AppPreferences(this);
-        TinyDB tinyDB = new TinyDB(this);
+        tinyDB = new TinyDB(this);
 
         oldLocation = new Location("Point A");
         newLocation = new Location("Point B");
@@ -122,7 +123,8 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
         //sensorNum= appPreferences.getString(CHILD_KEY, "");
 
         try {
-            groupNum = tinyDB.getListString(PREF_GROUPLIST);
+            groupNum = tinyDB.getListString(GPS_CHILD_KEY);
+            Log.d("groupnum", "onCreate: " + groupNum);
 
         }catch(Exception e){
 
@@ -133,7 +135,12 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
 
         Log.d("Iot", "osensorNUM service: " + groupNum);
 
-        getOnGpsState();
+        try {
+            getOnGpsState();
+        }catch(Exception e){
+
+            Log.e("error", "onCreate: ",e);
+        }
 
     }
 
@@ -386,39 +393,33 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
         Log.d("Iot", "Oncreate homeLatitude :" + homeLatitude);
         Log.d("Iot", "Oncreate homeLongitude :" + homeLongitude);
 
-        try{
-            for(int x = 0; x< autoOnGps.size(); x++) {
+
+        try {
+            if (homeDistance <= DISTANCE_TO_ON_LED && autoOnGps == 1) {
 
                 try {
-                    if (homeDistance <= DISTANCE_TO_ON_LED && autoOnGps.get(x) == 1) {
+                    //currently only can on led for on sensor only
 
-                        try {
-                            //currently only can on led for on sensor only
+                    mDatabaseReference.child(groupNum.get(0)).child(groupNum.get(1)).child("led_switch").setValue(1);
+                    Log.d("Iot", groupNum.get(0) + ": Distance in Range on LED");
 
-                            mDatabaseReference.child("led_switch").child(groupNum.get(x)).setValue(1);
-                            Log.d("Iot", groupNum.get(x) + ": Distance in Range on LED");
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            } else if (homeDistance > DISTANCE_TO_ON_LED && autoOnGps == 1) {
 
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                    } else if (homeDistance > DISTANCE_TO_ON_LED && autoOnGps.get(x) == 1) {
+                try {
+                    mDatabaseReference.child(groupNum.get(0)).child(groupNum.get(1)).child("led_switch").setValue(0);
+                    Log.d("Iot", groupNum.get(0) + ": Distance Out of Range on LED");
 
-                        try {
-                            mDatabaseReference.child("led_switch").child(groupNum.get(x)).setValue(0);
-                            Log.d("Iot", groupNum.get(x) + ": Distance Out of Range on LED");
-
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                    }
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
-        }catch (Exception e){
-
+        } catch (Exception e) {
             e.printStackTrace();
         }
+
 
         return distance;
     }
@@ -431,20 +432,13 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
 
     private void getOnGpsState(){
 
-        mDatabaseReference.child("autoOnGps").addValueEventListener(new ValueEventListener() {
+        mDatabaseReference.child(groupNum.get(0)).child(groupNum.get(1)).child("autoOnGps").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
 
                 if(dataSnapshot.exists()) {
 
-                    autoOnGps.clear();
-
-                    //currently only get state for only one sensor
-                    //TODO include for all sensor
-                    for(DataSnapshot ds : dataSnapshot.getChildren()) {
-
-                        autoOnGps.add((Long) ds.getValue());
-                    }
+                        autoOnGps = (Long) dataSnapshot.getValue();
 
                     Log.d("Iot", "autoOnGps Backgroud : " + autoOnGps);
 

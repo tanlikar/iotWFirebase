@@ -79,7 +79,7 @@ public class MainActivity extends AppCompatActivity implements  IPreferenceConst
 
     private void updateTemp(){
 
-        tempQuery = mDatabaseReference.child(sensorlist.get(0)).child(sensorlist.get(1)).child("temperature").orderByChild("timestamp").limitToLast(1000);
+        tempQuery = mDatabaseReference.child(sensorlist.get(0)).child(sensorlist.get(1)).orderByChild("timestamp").limitToLast(1000);
         tempQuery.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {

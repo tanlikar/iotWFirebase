@@ -46,10 +46,11 @@
         <item>Temperature</item>
         <item>Humidity</item>
         <item>Dust</item>
-        <item>MQ135</item>
-        <item>MQ2</item>
-        <item>MQ5</item>
-        <item>MQ6</item>
+        <item>CO2</item>
+        <item>LPG</item>
+        <item>CO</item>
+        <item>SMOKE</item>
+        <item>METHANE</item>
     </string-array>
 
 
