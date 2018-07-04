@@ -15,11 +15,12 @@ import android.widget.ListView;
 
 import com.tan.iotwfirebase.Storage.IPreferenceConstants;
 import com.tan.iotwfirebase.Storage.TinyDB;
+import com.tan.iotwfirebase.helper.ChildConstants;
 
 import java.util.ArrayList;
 import java.util.Objects;
 
-public class sensor_select extends AppCompatActivity implements IPreferenceConstants {
+public class sensor_select extends AppCompatActivity implements IPreferenceConstants, ChildConstants {
 
     private String groupNum;
     ArrayList<String> sensorList = new ArrayList<>();
@@ -27,9 +28,7 @@ public class sensor_select extends AppCompatActivity implements IPreferenceConst
     private ListView listView;
     private TinyDB prefs;
     private ArrayAdapter adapter;
-    final private String TEMPCILD = "Temperature";
-    final private  String HUMICHILD = "Humidity";
-    final private String CONTROLCHILD ="Control";
+
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override
@@ -71,27 +70,86 @@ public class sensor_select extends AppCompatActivity implements IPreferenceConst
 
                String[] split = parent.getItemAtPosition(position).toString().split(" ");
 
-               if(split[0].equals(TEMPCILD)){
+                switch (split[0]) {
+                    case TEMPCILD:
 
-                   intent = new Intent(sensor_select.this, MainActivity.class);
-                   childList.add(parent.getItemAtPosition(position).toString());
-                   intent.putStringArrayListExtra(CHILD_KEY, childList);
-                   startActivity(intent);
+                        intent = new Intent(sensor_select.this, generalGraph.class);
+                        childList.add(parent.getItemAtPosition(position).toString());
+                        childList.add(TEMPCILD);
+                        intent.putStringArrayListExtra(CHILD_KEY, childList);
+                        startActivity(intent);
 
-               }else  if (split[0].equals(HUMICHILD)){
+                        break;
+                    case HUMICHILD:
 
-                   intent = new Intent(sensor_select.this, HumiGraph.class);
-                   childList.add(parent.getItemAtPosition(position).toString());
-                   intent.putStringArrayListExtra(CHILD_KEY, childList);
-                   startActivity(intent);
+                        intent = new Intent(sensor_select.this, generalGraph.class);
+                        childList.add(parent.getItemAtPosition(position).toString());
+                        childList.add(HUMICHILD);
+                        intent.putStringArrayListExtra(CHILD_KEY, childList);
+                        startActivity(intent);
 
-               } else if (split[0].equals(CONTROLCHILD)){
+                        break;
+                    case CONTROLCHILD:
 
-                   intent = new Intent(sensor_select.this, LED_control.class);
-                   childList.add(parent.getItemAtPosition(position).toString());
-                   intent.putStringArrayListExtra(CHILD_KEY, childList);
-                   startActivity(intent);
-               }
+                        intent = new Intent(sensor_select.this, LED_control.class);
+                        childList.add(parent.getItemAtPosition(position).toString());
+                        intent.putStringArrayListExtra(CHILD_KEY, childList);
+                        startActivity(intent);
+                        break;
+
+                    case DUSTCHILD:
+
+                        intent = new Intent(sensor_select.this, generalGraph.class);
+                        childList.add(parent.getItemAtPosition(position).toString());
+                        childList.add(DUSTCHILD);
+                        intent.putStringArrayListExtra(CHILD_KEY, childList);
+                        startActivity(intent);
+                        break;
+
+                    case CO2CHILD:
+                        intent = new Intent(sensor_select.this, generalGraph.class);
+                        childList.add(parent.getItemAtPosition(position).toString());
+                        childList.add(CO2CHILD);
+                        intent.putStringArrayListExtra(CHILD_KEY, childList);
+                        startActivity(intent);
+                        break;
+
+                    case COCHILD:
+                        intent = new Intent(sensor_select.this, generalGraph.class);
+                        childList.add(parent.getItemAtPosition(position).toString());
+                        childList.add(COCHILD);
+                        intent.putStringArrayListExtra(CHILD_KEY, childList);
+                        startActivity(intent);
+                        break;
+
+                    case METHANECHILD:
+                        intent = new Intent(sensor_select.this, generalGraph.class);
+                        childList.add(parent.getItemAtPosition(position).toString());
+                        childList.add(METHANECHILD);
+                        intent.putStringArrayListExtra(CHILD_KEY, childList);
+                        startActivity(intent);
+                        break;
+
+                    case LPGCHILD:
+                        intent = new Intent(sensor_select.this, generalGraph.class);
+                        childList.add(parent.getItemAtPosition(position).toString());
+                        childList.add(LPGCHILD);
+                        intent.putStringArrayListExtra(CHILD_KEY, childList);
+                        startActivity(intent);
+                        break;
+
+                    case SMOKECHILD:
+                        intent = new Intent(sensor_select.this, generalGraph.class);
+                        childList.add(parent.getItemAtPosition(position).toString());
+                        childList.add(SMOKECHILD);
+                        intent.putStringArrayListExtra(CHILD_KEY, childList);
+                        startActivity(intent);
+                        break;
+
+
+
+
+                }
 
             }
         });

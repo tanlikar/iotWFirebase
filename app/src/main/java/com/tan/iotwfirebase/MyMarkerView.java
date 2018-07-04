@@ -10,6 +10,7 @@ import com.github.mikephil.charting.components.MarkerView;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.highlight.Highlight;
 import com.github.mikephil.charting.utils.MPPointF;
+import com.tan.iotwfirebase.helper.ChildConstants;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -21,14 +22,16 @@ import java.util.Locale;
  * Created by tanli on 1/7/2018.
  */
 
-public class MyMarkerView extends MarkerView {
+public class MyMarkerView extends MarkerView implements ChildConstants {
 
     private TextView tvContent;
     private long referenceTimestamp;  // minimum timestamp in your data set
     private DateFormat mDataFormat;
     private Date mDate;
+    private String child;
+    private String temp;
 
-    public MyMarkerView (Context context, int layoutResource, long referenceTimestamp) {
+    public MyMarkerView (Context context, int layoutResource, long referenceTimestamp, String child) {
         super(context, layoutResource);
         // this markerview only displays a textview
 
@@ -36,6 +39,7 @@ public class MyMarkerView extends MarkerView {
         this.referenceTimestamp = referenceTimestamp;
         this.mDataFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH);
         this.mDate = new Date();
+        this.child = child;
     }
 
     // callbacks everytime the MarkerView is redrawn, can be used to update the
@@ -45,7 +49,43 @@ public class MyMarkerView extends MarkerView {
     public void refreshContent(Entry e, Highlight highlight) {
         long currentTimestamp = (int)e.getX() + referenceTimestamp;
 
-        String text = e.getY() + "°C at " + getTimedate(currentTimestamp);
+        switch (child) {
+            case TEMPCILD:
+                temp = "°C";
+                break;
+
+            case HUMICHILD:
+                temp = " %";
+                break;
+
+            case DUSTCHILD:
+                temp = " ppm";
+                break;
+
+            case CO2CHILD:
+                temp = " ppm";
+                break;
+
+            case COCHILD:
+                temp = " ppm";
+                break;
+
+            case SMOKECHILD:
+                temp = " ppm";
+                break;
+
+            case LPGCHILD:
+                temp = " ppm";
+                break;
+
+            case METHANECHILD:
+                temp = " ppm";
+                break;
+
+
+        }
+
+        String text = e.getY() +  temp +" at " + getTimedate(currentTimestamp);
         Log.d("Iot", "refreshContent: " + e.getY());
         Log.d("Iot", "refreshContent: " + getTimedate(currentTimestamp));
 

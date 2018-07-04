@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".HumiGraph">
+    tools:context=".generalGraph">
+
 
     <android.support.design.widget.AppBarLayout
         android:id="@+id/appBarLayout"
@@ -12,38 +13,37 @@
         android:layout_height="wrap_content"
         android:theme="@style/AppTheme.AppBarOverlay"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
         <android.support.v7.widget.Toolbar
             android:id="@+id/toolbar_activity_humi"
             android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
+            android:layout_height="0dp"
             android:layout_weight="1"
-            android:background="?attr/colorPrimary"
             app:popupTheme="@style/AppTheme.PopupOverlay" />
     </android.support.design.widget.AppBarLayout>
 
     <TextView
-        android:id="@+id/humi_text"
-        android:layout_width="99dp"
+        android:id="@+id/general_text"
+        android:layout_width="wrap_content"
         android:layout_height="24dp"
         android:layout_marginLeft="23dp"
         android:layout_marginStart="23dp"
         android:layout_marginTop="16dp"
         android:gravity="end"
-        android:text="@string/humidity"
+        android:text=""
         android:textAlignment="textEnd"
         android:textSize="18sp"
         android:textStyle="bold"
-        app:layout_constraintEnd_toStartOf="@+id/humi_display"
+        app:layout_constraintEnd_toStartOf="@+id/general_display"
         app:layout_constraintStart_toStartOf="@+id/guideline"
         app:layout_constraintTop_toBottomOf="@+id/appBarLayout" />
 
     <TextView
-        android:id="@+id/humi_display"
-        android:layout_width="0dp"
+        android:id="@+id/general_display"
+        android:layout_width="wrap_content"
         android:layout_height="24dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
@@ -52,7 +52,7 @@
         android:textSize="18sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toStartOf="@+id/guideline3"
-        app:layout_constraintStart_toEndOf="@+id/humi_text"
+        app:layout_constraintStart_toEndOf="@+id/general_text"
         app:layout_constraintTop_toBottomOf="@+id/appBarLayout" />
 
 
@@ -71,7 +71,7 @@
         app:layout_constraintGuide_percent="0.15" />
 
     <com.github.mikephil.charting.charts.LineChart
-        android:id="@+id/humiGraph"
+        android:id="@+id/generalGraph"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginBottom="8dp"
@@ -81,6 +81,6 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/humi_display" />
+        app:layout_constraintTop_toBottomOf="@+id/general_display" />
 
 </android.support.constraint.ConstraintLayout>

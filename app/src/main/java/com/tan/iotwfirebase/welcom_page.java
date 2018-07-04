@@ -80,7 +80,7 @@ public class welcom_page extends AppCompatActivity implements ILocationConstants
      */
     protected static final int REQUEST_CHECK_SETTINGS = 0x1;
 
-    protected static final String TAG = MainActivity.class.getSimpleName();
+    //protected static final String TAG = MainActivity.class.getSimpleName();
 
     /**
      * Receiver listening to Location updates and updating UI in activity
@@ -134,6 +134,7 @@ public class welcom_page extends AppCompatActivity implements ILocationConstants
         backgroundImage = (ImageView) header.findViewById(R.id.listHeaderImage);
         listView.setOnScrollListener(this);
 
+        //select groupnum
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
