@@ -2,21 +2,21 @@ package com.tan.iotwfirebase;
 
 public class generalData {
 
-    private Long data;
+    private Float data;
     private Long timestamp;
 
-    public generalData (Long data, Long timestamp){
+    public generalData (Float data, Long timestamp){
         this.data = data;
         this.timestamp = timestamp;
     }
 
     public generalData(){}
 
-    public Long getData() {
+    public Float getData() {
         return data;
     }
 
-    public void setData(Long data) {
+    public void setData(Float data) {
         this.data = data;
     }
 

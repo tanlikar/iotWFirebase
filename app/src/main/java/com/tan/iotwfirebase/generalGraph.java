@@ -93,7 +93,7 @@ public class generalGraph extends AppCompatActivity implements IPreferenceConsta
                                 break;
 
                             case DUSTCHILD:
-                                disGeneral.setText((mData.get(mData.size() - 1).getData().toString()) + " ppm");
+                                disGeneral.setText((mData.get(mData.size() - 1).getData().toString()) + " mg/m^3");
                                 break;
 
                             case CO2CHILD:

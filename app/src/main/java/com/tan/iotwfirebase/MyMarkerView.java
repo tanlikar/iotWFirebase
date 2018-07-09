@@ -59,7 +59,7 @@ public class MyMarkerView extends MarkerView implements ChildConstants {
                 break;
 
             case DUSTCHILD:
-                temp = " ppm";
+                temp = " mg/m^3";
                 break;
 
             case CO2CHILD:

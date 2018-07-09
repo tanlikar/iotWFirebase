@@ -11,6 +11,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import com.tan.iotwfirebase.Storage.IPreferenceConstants;
 import com.tan.iotwfirebase.Storage.TinyDB;
@@ -112,6 +113,7 @@ public class add_sensor extends AppCompatActivity implements IPreferenceConstant
 
                 // use sensor group as key
                 prefs.putListString(sensorGroup, sensorList);
+                Toast.makeText(add_sensor.this,"Sensor added", Toast.LENGTH_SHORT).show();
             }
         });
 
