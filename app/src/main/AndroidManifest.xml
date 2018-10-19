@@ -24,7 +24,6 @@
             </intent-filter>
         </activity>
 
-
         <service
             android:name=".service.LocationService"
             android:enabled="true"
@@ -34,11 +33,12 @@
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
 
-        <activity android:name=".RemoveSensor" />
+        <activity android:name=".RemoveGroup" />
         <activity android:name=".LED_control" />
         <activity android:name=".add_sensor" />
         <activity android:name=".sensor_select" />
         <activity android:name=".generalGraph" />
+        <activity android:name=".RemoveSensor"></activity>
     </application>
 
 </manifest>

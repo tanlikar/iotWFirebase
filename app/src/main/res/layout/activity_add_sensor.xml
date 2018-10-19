@@ -35,11 +35,11 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="12dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/sensor_type"
+        app:layout_constraintStart_toEndOf="@+id/sensor_type_remove"
         app:layout_constraintTop_toBottomOf="@+id/spinner_group" />
 
     <TextView
-        android:id="@+id/sensor_group"
+        android:id="@+id/sensor_group_remove"
         android:layout_width="wrap_content"
         android:layout_height="21dp"
         android:layout_marginEnd="8dp"
@@ -57,7 +57,7 @@
         app:layout_constraintTop_toBottomOf="@+id/appBarLayout" />
 
     <TextView
-        android:id="@+id/sensor_type"
+        android:id="@+id/sensor_type_remove"
         android:layout_width="52dp"
         android:layout_height="wrap_content"
         android:layout_marginLeft="80dp"
@@ -68,7 +68,7 @@
         android:textSize="18sp"
         app:layout_constraintEnd_toStartOf="@+id/spinner_type"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/sensor_group" />
+        app:layout_constraintTop_toBottomOf="@+id/sensor_group_remove" />
 
     <Spinner
         android:id="@+id/spinner_group"
@@ -78,7 +78,7 @@
         android:layout_marginRight="8dp"
         android:layout_marginTop="12dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/sensor_group"
+        app:layout_constraintStart_toEndOf="@+id/sensor_group_remove"
         app:layout_constraintTop_toBottomOf="@+id/appBarLayout" />
 
     <Button

@@ -1,6 +1,5 @@
 package com.tan.iotwfirebase;
 
-import android.*;
 import android.Manifest;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -10,7 +9,6 @@ import android.content.IntentSender;
 import android.content.pm.PackageManager;
 import android.graphics.Rect;
 import android.support.annotation.NonNull;
-import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.LocalBroadcastManager;
@@ -29,12 +27,10 @@ import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import com.github.kayvannj.permission_utils.Func;
 import com.github.kayvannj.permission_utils.Func2;
 import com.github.kayvannj.permission_utils.PermissionUtil;
 import com.google.android.gms.common.api.ApiException;
@@ -56,9 +52,6 @@ import com.tan.iotwfirebase.service.LocationService;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
-
-import static com.tan.iotwfirebase.helper.ILocationConstants.PERMISSION_ACCESS_LOCATION_CODE;
 
 public class welcom_page extends AppCompatActivity implements ILocationConstants, NavigationView.OnNavigationItemSelectedListener, AbsListView.OnScrollListener, IPreferenceConstants {
 
@@ -236,7 +229,7 @@ public class welcom_page extends AppCompatActivity implements ILocationConstants
 
             groupList.clear();
             prefs.putListString(PREF_GROUPLIST, groupList);
-            Toast.makeText(welcom_page.this, "Sensors Removed", Toast.LENGTH_SHORT).show();
+            Toast.makeText(welcom_page.this, "Groups Removed", Toast.LENGTH_SHORT).show();
             adapter.notifyDataSetChanged();
 
         } else if (id == R.id.nav_setHomeLocation) {
@@ -268,7 +261,7 @@ public class welcom_page extends AppCompatActivity implements ILocationConstants
         } else if (id == R.id.nav_removeGroup) {
 
             Intent intent;
-            intent = new Intent(welcom_page.this, RemoveSensor.class);
+            intent = new Intent(welcom_page.this, RemoveGroup.class);
             startActivity(intent);
 
         } else if (id == R.id.nav_help) {
@@ -277,6 +270,11 @@ public class welcom_page extends AppCompatActivity implements ILocationConstants
 
             Intent intent;
             intent = new Intent(welcom_page.this, add_sensor.class);
+            startActivity(intent);
+
+        }else if (id == R.id.nav_removeSensor){
+            Intent intent;
+            intent = new Intent(welcom_page.this, RemoveSensor.class);
             startActivity(intent);
         }
 

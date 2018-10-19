@@ -58,6 +58,7 @@ public class sensor_select extends AppCompatActivity implements IPreferenceConst
 
         listView = (ListView) findViewById(R.id.list_sensor);
         adapter = new ArrayAdapter(this, R.layout.list_row, sensorList);
+
         listView.setAdapter(adapter);
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -114,40 +115,21 @@ public class sensor_select extends AppCompatActivity implements IPreferenceConst
                         startActivity(intent);
                         break;
 
-                    case COCHILD:
+                    case VOCCHILD:
                         intent = new Intent(sensor_select.this, generalGraph.class);
                         childList.add(parent.getItemAtPosition(position).toString());
-                        childList.add(COCHILD);
+                        childList.add(VOCCHILD);
                         intent.putStringArrayListExtra(CHILD_KEY, childList);
                         startActivity(intent);
                         break;
 
-                    case METHANECHILD:
+                    case CO2eCHILD:
                         intent = new Intent(sensor_select.this, generalGraph.class);
                         childList.add(parent.getItemAtPosition(position).toString());
-                        childList.add(METHANECHILD);
+                        childList.add(CO2eCHILD);
                         intent.putStringArrayListExtra(CHILD_KEY, childList);
                         startActivity(intent);
                         break;
-
-                    case LPGCHILD:
-                        intent = new Intent(sensor_select.this, generalGraph.class);
-                        childList.add(parent.getItemAtPosition(position).toString());
-                        childList.add(LPGCHILD);
-                        intent.putStringArrayListExtra(CHILD_KEY, childList);
-                        startActivity(intent);
-                        break;
-
-                    case SMOKECHILD:
-                        intent = new Intent(sensor_select.this, generalGraph.class);
-                        childList.add(parent.getItemAtPosition(position).toString());
-                        childList.add(SMOKECHILD);
-                        intent.putStringArrayListExtra(CHILD_KEY, childList);
-                        startActivity(intent);
-                        break;
-
-
-
 
                 }
 

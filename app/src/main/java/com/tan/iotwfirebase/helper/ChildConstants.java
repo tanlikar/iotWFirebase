@@ -7,8 +7,6 @@ public interface ChildConstants {
     String CONTROLCHILD ="Control";
     String DUSTCHILD = "Dust";
     String CO2CHILD = "CO2";
-    String LPGCHILD = "LPG";
-    String COCHILD = "CO";
-    String SMOKECHILD = "SMOKE";
-    String METHANECHILD = "METHANE";
+    String VOCCHILD = "VOC";
+    String CO2eCHILD = "CO2e";
 }

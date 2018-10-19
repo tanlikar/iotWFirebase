@@ -66,19 +66,11 @@ public class MyMarkerView extends MarkerView implements ChildConstants {
                 temp = " ppm";
                 break;
 
-            case COCHILD:
-                temp = " ppm";
+            case VOCCHILD:
+                temp = " ppb";
                 break;
 
-            case SMOKECHILD:
-                temp = " ppm";
-                break;
-
-            case LPGCHILD:
-                temp = " ppm";
-                break;
-
-            case METHANECHILD:
+            case CO2eCHILD:
                 temp = " ppm";
                 break;
 

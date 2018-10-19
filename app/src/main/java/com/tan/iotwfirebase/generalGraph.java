@@ -100,20 +100,12 @@ public class generalGraph extends AppCompatActivity implements IPreferenceConsta
                                 disGeneral.setText((mData.get(mData.size() - 1).getData().toString()) + " ppm");
                                 break;
 
-                            case COCHILD:
+                            case CO2eCHILD:
                                 disGeneral.setText((mData.get(mData.size() - 1).getData().toString()) + " ppm");
                                 break;
 
-                            case SMOKECHILD:
-                                disGeneral.setText((mData.get(mData.size() - 1).getData().toString()) + " ppm");
-                                break;
-
-                            case LPGCHILD:
-                                disGeneral.setText((mData.get(mData.size() - 1).getData().toString()) + " ppm");
-                                break;
-
-                            case METHANECHILD:
-                                disGeneral.setText((mData.get(mData.size() - 1).getData().toString()) + " ppm");
+                            case VOCCHILD:
+                                disGeneral.setText((mData.get(mData.size() - 1).getData().toString()) + " ppb");
                                 break;
 
 

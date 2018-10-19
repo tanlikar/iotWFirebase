@@ -21,9 +21,9 @@ import java.util.Objects;
 
 public class add_sensor extends AppCompatActivity implements IPreferenceConstants {
 
-    String sensorType, sensorGroup;
-    ArrayList<String> groupList = new ArrayList<>();
-    ArrayList<String> sensorList = new ArrayList<>();
+    private String sensorType, sensorGroup;
+    private ArrayList<String> groupList = new ArrayList<>();
+    private ArrayList<String> sensorList = new ArrayList<>();
     private TinyDB prefs;
     private int counter;
 
@@ -40,6 +40,7 @@ public class add_sensor extends AppCompatActivity implements IPreferenceConstant
 
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
+
 
         Spinner spinner_type = (Spinner) findViewById(R.id.spinner_type);
 // Create an ArrayAdapter using the string array and a default spinner layout
