@@ -11,6 +11,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import com.tan.iotwfirebase.Storage.IPreferenceConstants;
 import com.tan.iotwfirebase.Storage.TinyDB;
@@ -19,12 +20,16 @@ import com.tan.iotwfirebase.helper.ILocationConstants;
 import java.util.ArrayList;
 import java.util.Objects;
 
-public class RemoveSensor extends AppCompatActivity  implements IPreferenceConstants {
+public class RemoveSensor extends AppCompatActivity  implements IPreferenceConstants{
 
     private ArrayList<String> groupList  = new ArrayList<>();
     private TinyDB prefs;
-    private ArrayList<String> sensorList = new ArrayList<>();
-    private String groupNum, sensorType;
+    private ArrayList<ArrayList<String >> sensorList = new ArrayList<>();
+    private String sensorType;
+    private String groupNum;
+    ArrayAdapter<String> adp;
+    ArrayAdapter<String> adapter;
+    private int sensorPosition;
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override
@@ -33,7 +38,6 @@ public class RemoveSensor extends AppCompatActivity  implements IPreferenceConst
         setContentView(R.layout.activity_remove_sensor);
 
         Button button = (Button) findViewById(R.id.remove_sensor_button);
-        Button update_button =(Button) findViewById(R.id.update_remove);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_activity_remove_sensor);
         setSupportActionBar(toolbar);
@@ -46,12 +50,13 @@ public class RemoveSensor extends AppCompatActivity  implements IPreferenceConst
 
         //group adapter
         Spinner spinner_group_remove = (Spinner) findViewById(R.id.spinner_group_remove);
-        ArrayAdapter<String> adp = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, groupList);
+        adp = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, groupList);
         spinner_group_remove.setAdapter(adp);
 
         //type adapter
         Spinner spinner_type = (Spinner) findViewById(R.id.spinner_type_remove);
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, sensorList);
+        ArrayList<String> temp1= new ArrayList<>();
+        adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, temp1);
         spinner_type.setAdapter(adapter);
 
         spinner_group_remove.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -59,12 +64,10 @@ public class RemoveSensor extends AppCompatActivity  implements IPreferenceConst
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 
                 groupNum = parent.getItemAtPosition(position).toString();
-                Log.d("spinner_remove", "onItemClick: " + parent.getItemAtPosition(position).toString());
-
-                sensorList = prefs.getListString(groupNum);
-                Log.d("sensorlist", "onCreate: " + sensorList);
-
-
+                ArrayList<String> temp = prefs.getListString(groupNum);
+                adapter.clear();
+                adapter.addAll(temp);
+                adapter.notifyDataSetChanged();
 
             }
 
@@ -80,6 +83,7 @@ public class RemoveSensor extends AppCompatActivity  implements IPreferenceConst
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 
                 sensorType = parent.getItemAtPosition(position).toString();
+                sensorPosition = position;
                 Log.d("spinner_remove_sensor", "onItemClick: " + parent.getItemAtPosition(position).toString());
             }
 
@@ -89,16 +93,25 @@ public class RemoveSensor extends AppCompatActivity  implements IPreferenceConst
             }
         });
 
-        update_button.setOnClickListener(new View.OnClickListener() {
+        button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
+                try {
+                    ArrayList<String> temp = prefs.getListString(groupNum);
+                    Toast.makeText(RemoveSensor.this, temp.get(sensorPosition) + " is Removed from " + groupNum, Toast.LENGTH_SHORT).show();
+                    temp.remove(sensorPosition);
+                    prefs.putListString(groupNum, temp);
+                    adapter.clear();
+                    adapter.addAll(temp);
+                    adapter.notifyDataSetChanged();
+                }catch (Exception ignored){
+
+                }
 
             }
+
         });
-
-
-
 
 
     }
@@ -131,7 +144,6 @@ public class RemoveSensor extends AppCompatActivity  implements IPreferenceConst
         onBackPressed();
         return true;
     }
-
 
 }
 
