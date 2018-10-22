@@ -252,11 +252,18 @@ public class welcom_page extends AppCompatActivity implements ILocationConstants
 
         } else if (id == R.id.nav_addGroup) {
 
-            groupList.add("Group " + (groupList.size() + 1) );
-            Log.d("Iot", "onClickFloating: " + groupList.toString());
-            prefs.putListString(PREF_GROUPLIST, groupList);
-            Toast.makeText(welcom_page.this, "Group Added", Toast.LENGTH_SHORT).show();
-            adapter.notifyDataSetChanged();
+            int a=groupList.size()+1; 
+            for(int x=0; x<a; x++){
+
+                String temp = "Group "+ (x+1);
+                if(!groupList.contains(temp)){
+                    groupList.add(temp);
+                    Log.d("Iot", "onClickFloating: " + groupList.toString());
+                    prefs.putListString(PREF_GROUPLIST, groupList);
+                    Toast.makeText(welcom_page.this, "Group Added", Toast.LENGTH_SHORT).show();
+                    adapter.notifyDataSetChanged();
+                }
+            }
 
         } else if (id == R.id.nav_removeGroup) {
 
