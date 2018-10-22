@@ -7,8 +7,13 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.view.View;
 import android.view.inputmethod.EditorInfo;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -23,6 +28,9 @@ public class RemoveGroup extends AppCompatActivity implements IPreferenceConstan
 
     private TinyDB prefs;
     private ArrayList<String> groupList  = new ArrayList<>();
+    ArrayAdapter<String> adp;
+    private String groupNum;
+    private int temp;
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override
@@ -32,55 +40,77 @@ public class RemoveGroup extends AppCompatActivity implements IPreferenceConstan
 
         prefs = new TinyDB(this);
 
-        //get existing sensor list
-        try {
-            groupList = prefs.getListString(PREF_GROUPLIST);
+        initList();
 
-        }catch(Exception e){
-
-            Log.e("Iot", "initList: ",e );
-        }
+        Button button = (Button)findViewById(R.id.remove_group_button);
 
         //back arrow at toolbar
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_remove_sensor);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_remove_group);
         setSupportActionBar(toolbar);
 
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
-        final EditText editTextField = (EditText) findViewById(R.id.sensorTBremove_text);
+        //group adapter
+        Spinner spinner_group_remove = (Spinner) findViewById(R.id.spinner_activity_remove_group);
+        adp = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, groupList);
+        spinner_group_remove.setAdapter(adp);
 
-        editTextField.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+        spinner_group_remove.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
-            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 
-                if (actionId == EditorInfo.IME_ACTION_DONE) {
-                    String sensorName = editTextField.getText().toString();
+                groupNum = parent.getItemAtPosition(position).toString();
+                temp = position;
 
-                    Log.d("Iot", "onEditorAction: " + sensorName);
+            }
 
-                    for(int x = 0; x<groupList.size(); x++){
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
 
-                        if(sensorName.equals(groupList.get(x))){
-
-                            groupList.remove(x);
-                            prefs.putListString(PREF_GROUPLIST, groupList);
-
-                            Toast.makeText(RemoveGroup.this, sensorName + " Removed", Toast.LENGTH_SHORT).show();
-
-                        }
-                    }
-
-                    return true;
-                }
-
-                return false;
             }
         });
 
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                try {
+                    Toast.makeText(RemoveGroup.this, groupNum + " is Removed", Toast.LENGTH_SHORT).show();
+                    groupList.remove(temp);
+                    prefs.putListString(PREF_GROUPLIST, groupList);
+
+                    adp.clear();
+                    initList();
+                    adp.addAll(groupList);
+                    Log.d("grouplistRemove", "onClick: " + groupList);
+                    adp.notifyDataSetChanged();
+
+                }catch (Exception ignored){
+
+                }
+
+            }
+        });
 
     }
+
+    private void initList(){
+        //ideally list init with null, need user to add sensor beforehand to use app
+        //need to remove sensor 1
+
+        //need to add get arraylist from sharedpref
+        try {
+            groupList = prefs.getListString(PREF_GROUPLIST);
+            Log.d("removeSensor", String.valueOf(groupList));
+
+        }catch(Exception e){
+
+            Log.e("On", "initList: ",e );
+        }
+
+    }
+
 
     @Override
     public void onBackPressed() {

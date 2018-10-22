@@ -15,7 +15,6 @@ import android.widget.Toast;
 
 import com.tan.iotwfirebase.Storage.IPreferenceConstants;
 import com.tan.iotwfirebase.Storage.TinyDB;
-import com.tan.iotwfirebase.helper.ILocationConstants;
 
 import java.util.ArrayList;
 import java.util.Objects;
@@ -49,7 +48,7 @@ public class RemoveSensor extends AppCompatActivity  implements IPreferenceConst
         initList();
 
         //group adapter
-        Spinner spinner_group_remove = (Spinner) findViewById(R.id.spinner_group_remove);
+        Spinner spinner_group_remove = (Spinner) findViewById(R.id.spinner_activity_remove_group);
         adp = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, groupList);
         spinner_group_remove.setAdapter(adp);
 
