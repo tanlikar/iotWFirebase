@@ -1,6 +1,5 @@
 package com.tan.iotwfirebase;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.util.Log;
@@ -58,7 +57,7 @@ public class MyMarkerView extends MarkerView implements ChildConstants {
                 temp = " %";
                 break;
 
-            case DUSTCHILD:
+            case PM25CHILD:
                 temp = " mg/m^3";
                 break;
 

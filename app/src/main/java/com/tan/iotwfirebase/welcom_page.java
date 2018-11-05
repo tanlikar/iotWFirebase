@@ -252,7 +252,7 @@ public class welcom_page extends AppCompatActivity implements ILocationConstants
 
         } else if (id == R.id.nav_addGroup) {
 
-            int a=groupList.size()+1; 
+            int a=groupList.size()+1;
             for(int x=0; x<a; x++){
 
                 String temp = "Group "+ (x+1);

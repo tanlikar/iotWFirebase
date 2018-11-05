@@ -47,9 +47,10 @@
         <item>Control</item>
         <item>Temperature</item>
         <item>Humidity</item>
-        <item>Dust</item>
+        <item>PM25</item>
+        <item>PM10</item>
         <item>CO2</item>
-        <item>CO2e</item>
+        <item>eCO2</item>
         <item>VOC</item>
     </string-array>
 

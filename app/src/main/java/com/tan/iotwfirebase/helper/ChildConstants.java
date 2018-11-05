@@ -5,8 +5,9 @@ public interface ChildConstants {
     String TEMPCILD = "Temperature";
     String HUMICHILD = "Humidity";
     String CONTROLCHILD ="Control";
-    String DUSTCHILD = "Dust";
+    String PM25CHILD = "PM25";
+    String PM10CHILD = "PM10";
     String CO2CHILD = "CO2";
     String VOCCHILD = "VOC";
-    String CO2eCHILD = "CO2e";
+    String CO2eCHILD = "eCO2";
 }

@@ -8,7 +8,6 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
-import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
@@ -98,14 +97,24 @@ public class sensor_select extends AppCompatActivity implements IPreferenceConst
                         startActivity(intent);
                         break;
 
-                    case DUSTCHILD:
+                    case PM25CHILD:
 
                         intent = new Intent(sensor_select.this, generalGraph.class);
                         childList.add(parent.getItemAtPosition(position).toString());
-                        childList.add(DUSTCHILD);
+                        childList.add(PM25CHILD);
                         intent.putStringArrayListExtra(CHILD_KEY, childList);
                         startActivity(intent);
                         break;
+
+                    case PM10CHILD:
+
+                        intent = new Intent(sensor_select.this, generalGraph.class);
+                        childList.add(parent.getItemAtPosition(position).toString());
+                        childList.add(PM10CHILD);
+                        intent.putStringArrayListExtra(CHILD_KEY, childList);
+                        startActivity(intent);
+                        break;
+
 
                     case CO2CHILD:
                         intent = new Intent(sensor_select.this, generalGraph.class);

@@ -92,7 +92,11 @@ public class generalGraph extends AppCompatActivity implements IPreferenceConsta
                                 disGeneral.setText((mData.get(mData.size() - 1).getData().toString()) + " %");
                                 break;
 
-                            case DUSTCHILD:
+                            case PM25CHILD:
+                                disGeneral.setText((mData.get(mData.size() - 1).getData().toString()) + " mg/m^3");
+                                break;
+
+                            case PM10CHILD:
                                 disGeneral.setText((mData.get(mData.size() - 1).getData().toString()) + " mg/m^3");
                                 break;
 
