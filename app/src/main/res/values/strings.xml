@@ -2,9 +2,9 @@
     <string name="app_name">iotW/Firebase</string>
     <string name="temperature_Text">Temperature :</string>
     <string name="humidity">Humidity :</string>
-    <string name="loading">Loading...</string>
-    <string name="auto">Auto Switch On LED (Temp)</string>
-    <string name="on">Switch On LED</string>
+    <string name="loading">Loading…</string>
+    <string name="auto">Auto On (Temp)</string>
+    <string name="on">On </string>
 
     <string name="location_updated_message">Location updated</string>
     <string name="permission_denied">Permissions Denied!</string>
@@ -19,7 +19,7 @@
 
     <string name="Location_set_message">Home Location Set</string>
     <string name="Location_not_set_message">Home Location is not Set</string>
-    <string name="autogps">Auto Switch On LED (GPS)</string>
+    <string name="autogps">Auto On (GPS)</string>
     <string name="title_activity_my_sliding_menu">mySlidingMenu</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>

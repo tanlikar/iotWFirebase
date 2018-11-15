@@ -2,7 +2,7 @@ package com.tan.iotwfirebase.helper;
 
 public interface ChildConstants {
 
-    String TEMPCILD = "Temperature";
+    String TEMPCHILD = "Temperature";
     String HUMICHILD = "Humidity";
     String CONTROLCHILD ="Control";
     String PM25CHILD = "PM25";

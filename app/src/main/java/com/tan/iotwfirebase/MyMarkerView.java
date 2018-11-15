@@ -49,7 +49,7 @@ public class MyMarkerView extends MarkerView implements ChildConstants {
         long currentTimestamp = (int)e.getX() + referenceTimestamp;
 
         switch (child) {
-            case TEMPCILD:
+            case TEMPCHILD:
                 temp = "°C";
                 break;
 

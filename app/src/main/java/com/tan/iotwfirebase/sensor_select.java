@@ -71,11 +71,11 @@ public class sensor_select extends AppCompatActivity implements IPreferenceConst
                String[] split = parent.getItemAtPosition(position).toString().split(" ");
 
                 switch (split[0]) {
-                    case TEMPCILD:
+                    case TEMPCHILD:
 
                         intent = new Intent(sensor_select.this, generalGraph.class);
                         childList.add(parent.getItemAtPosition(position).toString());
-                        childList.add(TEMPCILD);
+                        childList.add(TEMPCHILD);
                         intent.putStringArrayListExtra(CHILD_KEY, childList);
                         startActivity(intent);
 
@@ -91,7 +91,7 @@ public class sensor_select extends AppCompatActivity implements IPreferenceConst
                         break;
                     case CONTROLCHILD:
 
-                        intent = new Intent(sensor_select.this, LED_control.class);
+                        intent = new Intent(sensor_select.this, Control.class);
                         childList.add(parent.getItemAtPosition(position).toString());
                         intent.putStringArrayListExtra(CHILD_KEY, childList);
                         startActivity(intent);

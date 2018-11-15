@@ -13,6 +13,8 @@ import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.tan.iotwfirebase.Storage.IPreferenceConstants;
 import com.tan.iotwfirebase.Storage.TinyDB;
 
@@ -27,6 +29,9 @@ public class add_sensor extends AppCompatActivity implements IPreferenceConstant
     private TinyDB prefs;
     private int counter;
 
+    private DatabaseReference mDatabaseReference;
+
+
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +45,8 @@ public class add_sensor extends AppCompatActivity implements IPreferenceConstant
 
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
+
+        mDatabaseReference = FirebaseDatabase.getInstance().getReference();
 
 
         Spinner spinner_type = (Spinner) findViewById(R.id.spinner_type);
@@ -115,6 +122,10 @@ public class add_sensor extends AppCompatActivity implements IPreferenceConstant
                 // use sensor group as key
                 prefs.putListString(sensorGroup, sensorList);
                 Toast.makeText(add_sensor.this,"Sensor added", Toast.LENGTH_SHORT).show();
+
+                if(sensorType.equals("Control")) {
+                    mDatabaseReference.child(sensorGroup).child(sensorType + " " + (counter + 1)).child("Temperature").setValue(25);
+                }
             }
         });
 

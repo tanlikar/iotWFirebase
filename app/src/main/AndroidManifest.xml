@@ -34,11 +34,11 @@
             android:value="@integer/google_play_services_version" />
 
         <activity android:name=".RemoveGroup" />
-        <activity android:name=".LED_control" />
+        <activity android:name=".Control" />
         <activity android:name=".add_sensor" />
         <activity android:name=".sensor_select" />
         <activity android:name=".generalGraph" />
-        <activity android:name=".RemoveSensor"></activity>
+        <activity android:name=".RemoveSensor" />
     </application>
 
 </manifest>

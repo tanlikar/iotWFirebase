@@ -84,7 +84,7 @@ public class generalGraph extends AppCompatActivity implements IPreferenceConsta
                     mData.add(dataSnapshot.getValue(generalData.class));
 
                         switch (sensorlist.get(2)) {
-                            case TEMPCILD:
+                            case TEMPCHILD:
                                 disGeneral.setText(String.format("%s°C", mData.get(mData.size() - 1).getData().toString()));
                                 break;
 
@@ -93,11 +93,11 @@ public class generalGraph extends AppCompatActivity implements IPreferenceConsta
                                 break;
 
                             case PM25CHILD:
-                                disGeneral.setText((mData.get(mData.size() - 1).getData().toString()) + " mg/m^3");
+                                disGeneral.setText((mData.get(mData.size() - 1).getData().toString()) + " ug/m^3");
                                 break;
 
                             case PM10CHILD:
-                                disGeneral.setText((mData.get(mData.size() - 1).getData().toString()) + " mg/m^3");
+                                disGeneral.setText((mData.get(mData.size() - 1).getData().toString()) + " ug/m^3");
                                 break;
 
                             case CO2CHILD:

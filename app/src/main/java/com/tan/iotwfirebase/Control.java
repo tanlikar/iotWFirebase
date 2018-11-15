@@ -6,8 +6,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.Switch;
+import android.widget.TextView;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -21,11 +24,13 @@ import com.tan.iotwfirebase.Storage.TinyDB;
 import java.util.ArrayList;
 import java.util.Objects;
 
-public class LED_control extends AppCompatActivity implements IPreferenceConstants {
+public class Control extends AppCompatActivity implements IPreferenceConstants {
 
     Switch mOn;
     Switch mAuto;
     Switch mAutoGps;
+    Button mUpButton, mDownButton;
+    TextView mTextView;
 
     private Long mLedState;
     private Long mAutoState;
@@ -34,16 +39,20 @@ public class LED_control extends AppCompatActivity implements IPreferenceConstan
     private Long autoOnGps;
     private String groupNum;
     private  ArrayList<String> childlist = new ArrayList<>();
+    private Long initTemp;
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_control);
+        setContentView(R.layout.activity_control_new);
 
         mOn = (Switch) findViewById(R.id.on_switch);
         mAuto = (Switch) findViewById(R.id.auto_switch);
         mAutoGps = (Switch) findViewById(R.id.AutoGpsButton);
+        mUpButton = (Button) findViewById(R.id.up_button);
+        mDownButton = (Button) findViewById(R.id.down_button);
+        mTextView = (TextView) findViewById(R.id.control_dis);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_activity_control);
         setSupportActionBar(toolbar);
@@ -64,16 +73,18 @@ public class LED_control extends AppCompatActivity implements IPreferenceConstan
         mTinyDB.putListString(GPS_CHILD_KEY, childlist);
         //appPreferences.putString(CHILD_KEY, groupNum);
 
+        setInitTemp();
         enableLed();
         enableAutoOnGps();
         checkAutoState();
         checkLedState();
+        control();
 
     }
 
     private void checkLedState(){
 
-        mDatabaseReference.child(childlist.get(0)).child(childlist.get(1)).child("led_switch").addValueEventListener(new ValueEventListener() {
+        mDatabaseReference.child(childlist.get(0)).child(childlist.get(1)).child("on").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
 
@@ -136,7 +147,7 @@ public class LED_control extends AppCompatActivity implements IPreferenceConstan
                 if(isChecked){
 
                     try {
-                        mDatabaseReference.child(childlist.get(0)).child(childlist.get(1)).child("led_switch").setValue(1);
+                        mDatabaseReference.child(childlist.get(0)).child(childlist.get(1)).child("on").setValue(1);
                         Log.d("Iot", "on : " + 1);
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -144,7 +155,7 @@ public class LED_control extends AppCompatActivity implements IPreferenceConstan
                 }else{
 
                     try {
-                        mDatabaseReference.child(childlist.get(0)).child(childlist.get(1)).child("led_switch").setValue(0);
+                        mDatabaseReference.child(childlist.get(0)).child(childlist.get(1)).child("on").setValue(0);
                         Log.d("Iot", "on : " + 0);
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -228,6 +239,45 @@ public class LED_control extends AppCompatActivity implements IPreferenceConstan
                     }
 
 
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    private void control(){
+        //TODO
+
+        mUpButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                initTemp = initTemp + 1;
+                mDatabaseReference.child(childlist.get(0)).child(childlist.get(1)).child("Temperature").setValue(initTemp);
+            }
+        });
+
+        mDownButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                initTemp = initTemp - 1;
+                mDatabaseReference.child(childlist.get(0)).child(childlist.get(1)).child("Temperature").setValue(initTemp);
+            }
+        });
+    }
+
+    private void setInitTemp(){
+
+        mDatabaseReference.child(childlist.get(0)).child(childlist.get(1)).child("Temperature").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+
+                if(dataSnapshot.exists()) {
+                    initTemp =  (Long) dataSnapshot.getValue();
+                    mTextView.setText(initTemp.toString());
                 }
             }
 
