@@ -176,6 +176,7 @@ public class Control extends AppCompatActivity implements IPreferenceConstants {
 
                     try {
                         mDatabaseReference.child(childlist.get(0)).child(childlist.get(1)).child("on").setValue(1);
+                        mDatabaseReference.child(childlist.get(0)).child(childlist.get(1)).child("Temperature").setValue(initTemp);
                         Log.d("Iot", "on : " + 1);
                     } catch (Exception e) {
                         e.printStackTrace();
