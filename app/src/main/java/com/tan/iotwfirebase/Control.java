@@ -2,6 +2,7 @@ package com.tan.iotwfirebase;
 
 import android.os.Build;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -16,6 +17,7 @@ import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.TextView;
 
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -37,7 +39,8 @@ public class Control extends AppCompatActivity implements IPreferenceConstants {
     TextView mTextView;
     Spinner spinner_fan;
 
-    private Long  mAutoPmvState, mFanState;
+    private Long  mAutoPmvState;
+    private int mFanState;
     private DatabaseReference mDatabaseReference;
     private TinyDB mTinyDB;
     private Long autoOnGps;
@@ -76,7 +79,6 @@ public class Control extends AppCompatActivity implements IPreferenceConstants {
 
         //for autogps
         mTinyDB.putListString(GPS_CHILD_KEY, childlist);
-        //appPreferences.putString(CHILD_KEY, groupNum);
 
         fanArray = getResources().getStringArray(R.array.fan_speed);
         spinner_fan = (Spinner) findViewById(R.id.spinner_fan);
@@ -87,13 +89,12 @@ public class Control extends AppCompatActivity implements IPreferenceConstants {
 // Apply the adapter to the spinner
         spinner_fan.setAdapter(adapter);
 
+        iniFanSpeed();
         setInitTemp();
         enableOn();
         enableAutoOnGps();
         checkAutoState();
         control();
-        iniFanSpeed();
-
 
         spinner_fan.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -102,6 +103,7 @@ public class Control extends AppCompatActivity implements IPreferenceConstants {
                 Log.d("fan", "fanArray" + Arrays.toString(fanArray));
                 Log.d("fan", "onItemSelected: " + parent.getItemAtPosition(position).toString());
                 mDatabaseReference.child(childlist.get(0)).child(childlist.get(1)).child("fan").setValue(position);
+                mTinyDB.putInt(FAN_SPEED, position);
             }
 
             @Override
@@ -109,6 +111,7 @@ public class Control extends AppCompatActivity implements IPreferenceConstants {
 
             }
         });
+
     }
 
         private void checkAutoState(){
@@ -149,9 +152,10 @@ public class Control extends AppCompatActivity implements IPreferenceConstants {
 
                 if (dataSnapshot.exists()) {
                     if (dataSnapshot.exists()) {
-                        mFanState = (Long) dataSnapshot.getValue();
-                        spinner_fan.setSelection(Math.toIntExact(mFanState));
-                        Log.d("initFan", "onDataChange: " + mFanState);
+                        mFanState = Math.toIntExact((Long) dataSnapshot.getValue());
+                        mTinyDB.putInt(FAN_SPEED, mFanState);
+                        spinner_fan.setSelection(mFanState);
+                        Log.d("initFan", String.valueOf(mFanState));
                     }
                 }
             }
@@ -161,6 +165,10 @@ public class Control extends AppCompatActivity implements IPreferenceConstants {
 
             }
         });
+
+        int fan_speed = mTinyDB.getInt(FAN_SPEED);
+        spinner_fan.setSelection(fan_speed);
+        Log.d("initFan", String.valueOf(fan_speed));
 
     }
 

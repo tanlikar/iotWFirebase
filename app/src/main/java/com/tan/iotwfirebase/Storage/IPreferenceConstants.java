@@ -14,6 +14,7 @@ public interface IPreferenceConstants {
     String GPS_CHILD_KEY = "gpschild";
     String PREF_CUR_LATITUDE = "curr_latitude";
     String PREF_CUR_LONGITUDE = "curr_longitude";
+    String FAN_SPEED = "speed";
 
 }
 

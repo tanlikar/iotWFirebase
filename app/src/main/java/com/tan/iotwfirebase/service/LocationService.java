@@ -400,8 +400,8 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
                 try {
                     //currently only can on led for on sensor only
 
-                    mDatabaseReference.child(groupNum.get(0)).child(groupNum.get(1)).child("led_switch").setValue(1);
-                    Log.d("Iot", groupNum.get(0) + ": Distance in Range on LED");
+                    mDatabaseReference.child(groupNum.get(0)).child(groupNum.get(1)).child("gspState").setValue(1);
+                    Log.d("Iot", groupNum.get(0) + ": Distance in Range on Aircon");
 
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -409,8 +409,8 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
             } else if (homeDistance > DISTANCE_TO_ON_LED && autoOnGps == 1) {
 
                 try {
-                    mDatabaseReference.child(groupNum.get(0)).child(groupNum.get(1)).child("led_switch").setValue(0);
-                    Log.d("Iot", groupNum.get(0) + ": Distance Out of Range on LED");
+                    mDatabaseReference.child(groupNum.get(0)).child(groupNum.get(1)).child("gpsState").setValue(0);
+                    Log.d("Iot", groupNum.get(0) + ": Distance Out of Range");
 
                 } catch (Exception e) {
                     e.printStackTrace();
