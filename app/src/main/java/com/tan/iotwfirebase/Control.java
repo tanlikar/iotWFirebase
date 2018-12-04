@@ -8,8 +8,11 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CompoundButton;
+import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.TextView;
 
@@ -21,26 +24,27 @@ import com.google.firebase.database.ValueEventListener;
 import com.tan.iotwfirebase.Storage.IPreferenceConstants;
 import com.tan.iotwfirebase.Storage.TinyDB;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Objects;
 
 public class Control extends AppCompatActivity implements IPreferenceConstants {
 
-    Switch mOn;
-    Switch mAutoTemp;
     Switch mAutoGps;
     Switch mAutoPmv;
-    Button mUpButton, mDownButton;
+    Button mUpButton, mDownButton, mPowerButton;
     TextView mTextView;
+    Spinner spinner_fan;
 
-    private Long mLedState;
-    private Long mAutoState, mAutoPmvState;
+    private Long  mAutoPmvState, mFanState;
     private DatabaseReference mDatabaseReference;
     private TinyDB mTinyDB;
     private Long autoOnGps;
     private String groupNum;
     private  ArrayList<String> childlist = new ArrayList<>();
     private Long initTemp;
+    private String[] fanArray;
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override
@@ -48,8 +52,7 @@ public class Control extends AppCompatActivity implements IPreferenceConstants {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_control_new);
 
-        mOn = (Switch) findViewById(R.id.on_switch);
-        mAutoTemp = (Switch) findViewById(R.id.auto_switch);
+        mPowerButton = (Button) findViewById(R.id.power_button);
         mAutoGps = (Switch) findViewById(R.id.AutoGpsButton);
         mUpButton = (Button) findViewById(R.id.up_button);
         mDownButton = (Button) findViewById(R.id.down_button);
@@ -75,85 +78,80 @@ public class Control extends AppCompatActivity implements IPreferenceConstants {
         mTinyDB.putListString(GPS_CHILD_KEY, childlist);
         //appPreferences.putString(CHILD_KEY, groupNum);
 
+        fanArray = getResources().getStringArray(R.array.fan_speed);
+        spinner_fan = (Spinner) findViewById(R.id.spinner_fan);
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
+                R.array.fan_speed, android.R.layout.simple_spinner_item);
+// Specify the layout to use when the list of choices appears
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+// Apply the adapter to the spinner
+        spinner_fan.setAdapter(adapter);
+
         setInitTemp();
         enableOn();
         enableAutoOnGps();
         checkAutoState();
-        checkOnState();
         control();
+        iniFanSpeed();
 
-    }
 
-    private void checkOnState(){
-
-        mDatabaseReference.child(childlist.get(0)).child(childlist.get(1)).child("on").addValueEventListener(new ValueEventListener() {
+        spinner_fan.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 
-                if(dataSnapshot.exists()) {
-                    mLedState = (Long) dataSnapshot.getValue();
-
-                    if (mLedState == 1){
-
-                        mOn.setChecked(true);
-                        Log.d("Iot", "led on");
-                    }else{
-
-                        mOn.setChecked(false);
-                        Log.d("Iot", "led off");
-                    }
-                }
+                Log.d("fan", "fanArray" + Arrays.toString(fanArray));
+                Log.d("fan", "onItemSelected: " + parent.getItemAtPosition(position).toString());
+                mDatabaseReference.child(childlist.get(0)).child(childlist.get(1)).child("fan").setValue(position);
             }
 
             @Override
-            public void onCancelled(DatabaseError databaseError) {
+            public void onNothingSelected(AdapterView<?> parent) {
 
             }
         });
     }
 
-    private void checkAutoState(){
-
-        mDatabaseReference.child(childlist.get(0)).child(childlist.get(1)).child("auto_switch").addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-
-                if(dataSnapshot.exists()) {
-                    mAutoState = (Long) dataSnapshot.getValue();
-
-                    if (mAutoState == 1){
-
-                        mAutoTemp.setChecked(true);
-                        Log.d("Iot", "Auto on : on");
-                    }else{
-
-                        mAutoTemp.setChecked(false);
-                        Log.d("Iot", "Auto on : off");
-                    }
-                }
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
+        private void checkAutoState(){
 
         mDatabaseReference.child(childlist.get(0)).child(childlist.get(1)).child("auto_pmv").addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                    if (dataSnapshot.exists()) {
+                        mAutoPmvState = (Long) dataSnapshot.getValue();
+
+                        if (mAutoPmvState == 1) {
+
+                            mAutoPmv.setChecked(true);
+                            Log.d("Iot", "Auto on pmv : on");
+                        } else {
+
+                            mAutoPmv.setChecked(false);
+                            Log.d("Iot", "Auto on pmv: off");
+                        }
+                    }
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                }
+            });
+
+    }
+
+    private void iniFanSpeed(){
+
+        mDatabaseReference.child(childlist.get(0)).child(childlist.get(1)).child("fan").addValueEventListener(new ValueEventListener() {
+            @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
                 if (dataSnapshot.exists()) {
-                    mAutoPmvState = (Long) dataSnapshot.getValue();
-
-                    if (mAutoPmvState == 1) {
-
-                        mAutoPmv.setChecked(true);
-                        Log.d("Iot", "Auto on pmv : on");
-                    } else {
-
-                        mAutoPmv.setChecked(false);
-                        Log.d("Iot", "Auto on pmv: off");
+                    if (dataSnapshot.exists()) {
+                        mFanState = (Long) dataSnapshot.getValue();
+                        spinner_fan.setSelection(Math.toIntExact(mFanState));
+                        Log.d("initFan", "onDataChange: " + mFanState);
                     }
                 }
             }
@@ -168,60 +166,20 @@ public class Control extends AppCompatActivity implements IPreferenceConstants {
 
     private void enableOn(){
 
-        mOn.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        mPowerButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-
-                if(isChecked){
-
-                    try {
-                        mDatabaseReference.child(childlist.get(0)).child(childlist.get(1)).child("on").setValue(1);
-                        mDatabaseReference.child(childlist.get(0)).child(childlist.get(1)).child("Temperature").setValue(initTemp);
-                        Log.d("Iot", "on : " + 1);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                }else{
-
-                    try {
-                        mDatabaseReference.child(childlist.get(0)).child(childlist.get(1)).child("on").setValue(0);
-                        Log.d("Iot", "on : " + 0);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
+            public void onClick(View v) {
+                try {
+                    mDatabaseReference.child(childlist.get(0)).child(childlist.get(1)).child("on").setValue(1);
+                    mDatabaseReference.child(childlist.get(0)).child(childlist.get(1)).child("Temperature").setValue(initTemp);
+                    Log.d("Iot", "on : " + 1);
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
-
             }
         });
 
-        mAutoTemp.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-
-                if(isChecked){
-
-                    try {
-                        mDatabaseReference.child(childlist.get(0)).child(childlist.get(1)).child("auto_switch").setValue(1);
-                        Log.d("Iot", "auto : " + 1);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-
-                }else{
-
-                    try {
-                        mDatabaseReference.child(childlist.get(0)).child(childlist.get(1)).child("auto_switch").setValue(0);
-                        Log.d("Iot", "auto : " + 0);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                }
-
-
-            }
-        });
-
-        mAutoPmv.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+       mAutoPmv.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 

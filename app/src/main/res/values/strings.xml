@@ -42,6 +42,7 @@
     <string name="add">Add</string>
     <string name="remove">Remove</string>
     <string name="update">Update</string>
+    <string name="power">Power</string>
 
     <string-array name="sensor_array">
         <item>Control</item>
@@ -54,5 +55,13 @@
         <item>VOC</item>
     </string-array>
 
+    <string-array name="fan_speed">
+        <item>Min</item>
+        <item>Medium</item>
+        <item>Max</item>
+        <item>Turbo</item>
+        <item>Quiet</item>
+        <item>Auto</item>
+    </string-array>
 
 </resources>
