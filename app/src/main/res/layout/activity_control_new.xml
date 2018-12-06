@@ -41,16 +41,21 @@
         android:id="@+id/AutoGpsButton"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="7dp"
-        android:layout_marginRight="7dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="8dp"
         android:text="@string/autogps"
         android:textSize="16sp"
         android:textStyle="bold"
-        app:layout_constraintEnd_toStartOf="@+id/autoPMV"
+        app:layout_constraintEnd_toStartOf="@+id/guideline3"
         app:layout_constraintStart_toStartOf="@+id/guideline"
         app:layout_constraintTop_toBottomOf="@+id/power_button" />
+        <!--app:layout_constraintEnd_toStartOf="@+id/autoPMV"-->
+        app:layout_constraintStart_toStartOf="@+id/guideline"
+        app:layout_constraintTop_toBottomOf="@+id/power_button"
+        android:layout_marginLeft="8dp" />
 
     <TextView
         android:id="@+id/control_dis"
@@ -87,14 +92,14 @@
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="16dp"
         android:background="@drawable/arrow_up"
         android:rotation="180"
         app:layout_constraintEnd_toStartOf="@+id/guideline3"
         app:layout_constraintStart_toStartOf="@+id/guideline"
         app:layout_constraintTop_toBottomOf="@+id/up_button" />
 
-    <Switch
+    <!--<Switch
         android:id="@+id/autoPMV"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -108,7 +113,7 @@
         android:textStyle="bold"
         app:layout_constraintEnd_toStartOf="@+id/guideline3"
         app:layout_constraintStart_toEndOf="@+id/AutoGpsButton"
-        app:layout_constraintTop_toBottomOf="@+id/power_button" />
+        app:layout_constraintTop_toBottomOf="@+id/power_button" />-->
 
     <Button
         android:id="@+id/power_button"
@@ -148,13 +153,66 @@
         android:layout_marginRight="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:text="Fan Speed"
+        android:text="@string/fan_speed"
         android:textColor="@color/black"
         android:textSize="16sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toStartOf="@+id/spinner_fan"
         app:layout_constraintStart_toStartOf="@+id/guideline"
         app:layout_constraintTop_toBottomOf="@+id/AutoGpsButton" />
+
+    <Switch
+        android:id="@+id/switch_swing"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:text="@string/swing"
+        android:textAllCaps="false"
+        android:textColor="@color/black"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toStartOf="@+id/switch_sleep"
+        app:layout_constraintStart_toStartOf="@+id/guideline"
+        app:layout_constraintTop_toBottomOf="@+id/fan_text" />
+
+    <Switch
+        android:id="@+id/switch_sleep"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:text="@string/sleep"
+        android:textAllCaps="false"
+        android:textColor="@color/black"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toStartOf="@+id/guideline3"
+        app:layout_constraintStart_toEndOf="@+id/switch_swing"
+        app:layout_constraintTop_toBottomOf="@+id/fan_text" />
+
+    <Switch
+        android:id="@+id/switch_ambient"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:text="@string/ambient"
+        android:textAllCaps="false"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toStartOf="@+id/guideline3"
+        app:layout_constraintStart_toStartOf="@+id/guideline"
+        app:layout_constraintTop_toBottomOf="@+id/switch_swing" />
 
 
 </android.support.constraint.ConstraintLayout>

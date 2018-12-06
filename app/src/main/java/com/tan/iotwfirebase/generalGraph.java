@@ -73,7 +73,7 @@ public class generalGraph extends AppCompatActivity implements IPreferenceConsta
 
     private void update(){
 
-            generalQuery = mDatabaseReference.child(sensorlist.get(0)).child(sensorlist.get(1)).orderByChild("timestamp").limitToLast(1000);
+            generalQuery = mDatabaseReference.child(sensorlist.get(0)).child(sensorlist.get(1)).orderByChild("timestamp").limitToLast(720);
             generalQuery.addChildEventListener(new ChildEventListener() {
             @SuppressLint("SetTextI18n")
             @Override

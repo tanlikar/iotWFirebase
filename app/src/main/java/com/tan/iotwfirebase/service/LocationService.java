@@ -241,7 +241,8 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
         } else {
 
             //TODO add notification instead of toast
-            //Toast.makeText(this, R.string.unable_to_find_location, Toast.LENGTH_SHORT).show();
+            Log.d("updateUI", "updateUI: " +  R.string.unable_to_find_location);
+           // Toast.makeText(this, R.string.unable_to_find_location, Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -396,11 +397,12 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
 
         try {
             if (homeDistance <= DISTANCE_TO_ON_LED && autoOnGps == 1) {
+               try {
+                    //currently only update gpsstate for group 1
+                   //TODO need to improve the coding
+                   //TODO gps of phone have problem, location service switch off when pokedex100 on
 
-                try {
-                    //currently only can on led for on sensor only
-
-                    mDatabaseReference.child(groupNum.get(0)).child(groupNum.get(1)).child("gspState").setValue(1);
+                    mDatabaseReference.child(groupNum.get(0)).child(groupNum.get(1)).child("gpsState").setValue(1);
                     Log.d("Iot", groupNum.get(0) + ": Distance in Range on Aircon");
 
                 } catch (Exception e) {
@@ -419,6 +421,7 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
         } catch (Exception e) {
             e.printStackTrace();
         }
+
 
 
         return distance;

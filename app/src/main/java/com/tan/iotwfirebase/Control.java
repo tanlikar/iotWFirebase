@@ -1,8 +1,8 @@
 package com.tan.iotwfirebase;
 
+import android.annotation.SuppressLint;
 import android.os.Build;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -17,7 +17,6 @@ import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.TextView;
 
-import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -26,7 +25,6 @@ import com.google.firebase.database.ValueEventListener;
 import com.tan.iotwfirebase.Storage.IPreferenceConstants;
 import com.tan.iotwfirebase.Storage.TinyDB;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Objects;
@@ -34,12 +32,17 @@ import java.util.Objects;
 public class Control extends AppCompatActivity implements IPreferenceConstants {
 
     Switch mAutoGps;
-    Switch mAutoPmv;
+  //  Switch mAutoPmv;
+    Switch mSleep;
+    Switch mSwing;
+    Switch mAmbient;
     Button mUpButton, mDownButton, mPowerButton;
     TextView mTextView;
     Spinner spinner_fan;
 
-    private Long  mAutoPmvState;
+    private final Long minSetting = 16L;
+    private final Long maxSetting = 30L;
+    //private Long  mAutoPmvState;
     private int mFanState;
     private DatabaseReference mDatabaseReference;
     private TinyDB mTinyDB;
@@ -60,7 +63,10 @@ public class Control extends AppCompatActivity implements IPreferenceConstants {
         mUpButton = (Button) findViewById(R.id.up_button);
         mDownButton = (Button) findViewById(R.id.down_button);
         mTextView = (TextView) findViewById(R.id.control_dis);
-        mAutoPmv = (Switch) findViewById(R.id.autoPMV);
+        //mAutoPmv = (Switch) findViewById(R.id.autoPMV);
+        mSwing = (Switch) findViewById(R.id.switch_swing);
+        mSleep = (Switch) findViewById(R.id.switch_sleep);
+        mAmbient = (Switch) findViewById(R.id.switch_ambient);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_activity_control);
         setSupportActionBar(toolbar);
@@ -89,11 +95,13 @@ public class Control extends AppCompatActivity implements IPreferenceConstants {
 // Apply the adapter to the spinner
         spinner_fan.setAdapter(adapter);
 
+        setSleep();
+        setInitQuiet();
         iniFanSpeed();
         setInitTemp();
         enableOn();
         enableAutoOnGps();
-        checkAutoState();
+        //checkAutoState();
         control();
 
         spinner_fan.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -114,34 +122,34 @@ public class Control extends AppCompatActivity implements IPreferenceConstants {
 
     }
 
-        private void checkAutoState(){
+//        private void checkAutoState(){
+//
+//        mDatabaseReference.child(childlist.get(0)).child(childlist.get(1)).child("auto_pmv").addValueEventListener(new ValueEventListener() {
+//                @Override
+//                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+//
+//                    if (dataSnapshot.exists()) {
+//                        mAutoPmvState = (Long) dataSnapshot.getValue();
+//
+//                        if (mAutoPmvState == 1) {
+//
+//                            mAutoPmv.setChecked(true);
+//                            Log.d("Iot", "Auto on pmv : on");
+//                        } else {
+//
+//                            mAutoPmv.setChecked(false);
+//                            Log.d("Iot", "Auto on pmv: off");
+//                        }
+//                    }
+//                }
+//
+//                @Override
+//                public void onCancelled(@NonNull DatabaseError databaseError) {
+//
+//                }
+//            });
 
-        mDatabaseReference.child(childlist.get(0)).child(childlist.get(1)).child("auto_pmv").addValueEventListener(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-
-                    if (dataSnapshot.exists()) {
-                        mAutoPmvState = (Long) dataSnapshot.getValue();
-
-                        if (mAutoPmvState == 1) {
-
-                            mAutoPmv.setChecked(true);
-                            Log.d("Iot", "Auto on pmv : on");
-                        } else {
-
-                            mAutoPmv.setChecked(false);
-                            Log.d("Iot", "Auto on pmv: off");
-                        }
-                    }
-                }
-
-                @Override
-                public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                }
-            });
-
-    }
+//    }
 
     private void iniFanSpeed(){
 
@@ -187,7 +195,7 @@ public class Control extends AppCompatActivity implements IPreferenceConstants {
             }
         });
 
-       mAutoPmv.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+       /*mAutoPmv.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 
@@ -210,7 +218,7 @@ public class Control extends AppCompatActivity implements IPreferenceConstants {
                     }
                 }
             }
-        });
+        });*/
 
     }
 
@@ -276,6 +284,9 @@ public class Control extends AppCompatActivity implements IPreferenceConstants {
             @Override
             public void onClick(View v) {
                 initTemp = initTemp + 1;
+                if(initTemp >= 30) {
+                    initTemp = 30L;
+                }
                 mDatabaseReference.child(childlist.get(0)).child(childlist.get(1)).child("Temperature").setValue(initTemp);
             }
         });
@@ -284,6 +295,9 @@ public class Control extends AppCompatActivity implements IPreferenceConstants {
             @Override
             public void onClick(View v) {
                 initTemp = initTemp - 1;
+                if(initTemp <= 16){
+                    initTemp = 16L;
+                }
                 mDatabaseReference.child(childlist.get(0)).child(childlist.get(1)).child("Temperature").setValue(initTemp);
             }
         });
@@ -304,6 +318,143 @@ public class Control extends AppCompatActivity implements IPreferenceConstants {
             @Override
             public void onCancelled(DatabaseError databaseError) {
 
+            }
+        });
+    }
+
+    private void setInitQuiet(){
+
+        mDatabaseReference.child(childlist.get(0)).child(childlist.get(1)).child("Sleep").addValueEventListener(new ValueEventListener() {
+            @SuppressLint("SetTextI18n")
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+
+                if(dataSnapshot.exists()) {
+                    Long initSleep =  (Long) dataSnapshot.getValue();
+                    if(initSleep == 1) {
+                        mSleep.setChecked(true);
+                    }else if(initSleep == 0){
+                        mSleep.setChecked(false);
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+        mDatabaseReference.child(childlist.get(0)).child(childlist.get(1)).child("Swing").addValueEventListener(new ValueEventListener() {
+            @SuppressLint("SetTextI18n")
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+
+                if(dataSnapshot.exists()) {
+                    Long initSwing =  (Long) dataSnapshot.getValue();
+                    if(initSwing == 1) {
+                        mSwing.setChecked(true);
+
+                    }else if(initSwing == 0){
+                        mSwing.setChecked(false);
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+        mDatabaseReference.child(childlist.get(0)).child(childlist.get(1)).child("Ambient").addValueEventListener(new ValueEventListener() {
+            @SuppressLint("SetTextI18n")
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+
+                if(dataSnapshot.exists()) {
+                    Long initAmbient =  (Long) dataSnapshot.getValue();
+                    if(initAmbient == 1) {
+                        mAmbient.setChecked(true);
+
+                    }else if(initAmbient == 0){
+                        mAmbient.setChecked(false);
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    private void setSleep(){
+
+        mSleep.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(isChecked){
+
+                    try {
+                        mDatabaseReference.child(childlist.get(0)).child(childlist.get(1)).child("Sleep").setValue(1);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+
+                }else{
+
+                    try {
+                        mDatabaseReference.child(childlist.get(0)).child(childlist.get(1)).child("Sleep").setValue(0);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        });
+
+        mSwing.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(isChecked){
+
+                    try {
+                        mDatabaseReference.child(childlist.get(0)).child(childlist.get(1)).child("Swing").setValue(1);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+
+                }else{
+
+                    try {
+                        mDatabaseReference.child(childlist.get(0)).child(childlist.get(1)).child("Swing").setValue(0);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        });
+
+        mAmbient.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(isChecked){
+
+                    try {
+                        mDatabaseReference.child(childlist.get(0)).child(childlist.get(1)).child("Ambient").setValue(1);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+
+                }else{
+
+                    try {
+                        mDatabaseReference.child(childlist.get(0)).child(childlist.get(1)).child("Ambient").setValue(0);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
             }
         });
     }

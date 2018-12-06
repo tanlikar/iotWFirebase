@@ -43,6 +43,10 @@
     <string name="remove">Remove</string>
     <string name="update">Update</string>
     <string name="power">Power</string>
+    <string name="fan_speed">Fan Speed</string>
+    <string name="sleep">Sleep</string>
+    <string name="swing">Swing</string>
+    <string name="ambient">Ambient</string>
 
     <string-array name="sensor_array">
         <item>Control</item>

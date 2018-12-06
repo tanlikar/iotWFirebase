@@ -24,6 +24,31 @@
             </intent-filter>
         </activity>
 
+        <activity
+            android:name=".Control"
+            android:screenOrientation="portrait">
+        </activity>
+
+        <activity
+            android:name=".add_sensor"
+            android:screenOrientation="portrait">
+        </activity>
+
+        <activity
+            android:name=".sensor_select"
+            android:screenOrientation="portrait">
+        </activity>
+
+        <activity
+            android:name=".RemoveSensor"
+            android:screenOrientation="portrait">
+        </activity>
+
+        <activity
+            android:name=".RemoveGroup"
+            android:screenOrientation="portrait">
+        </activity>
+
         <service
             android:name=".service.LocationService"
             android:enabled="true"
@@ -33,12 +58,13 @@
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
 
-        <activity android:name=".RemoveGroup" />
-        <activity android:name=".Control" />
-        <activity android:name=".add_sensor" />
-        <activity android:name=".sensor_select" />
-        <activity android:name=".generalGraph" />
-        <activity android:name=".RemoveSensor" />
+        <!--<activity android:name=".RemoveGroup" />-->
+        <!--<activity android:name=".Control" />-->
+        <!--<activity android:name=".add_sensor" />-->
+        <!--<activity android:name=".sensor_select" />-->
+        <activity android:name=".generalGraph"
+            android:screenOrientation="portrait"/>
+        <!--<activity android:name=".RemoveSensor" />-->
     </application>
 
 </manifest>
