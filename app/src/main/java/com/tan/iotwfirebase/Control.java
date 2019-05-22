@@ -100,7 +100,7 @@ public class Control extends AppCompatActivity implements IPreferenceConstants {
         iniFanSpeed();
         setInitTemp();
         enableOn();
-        enableAutoOnGps();
+        //enableAutoOnGps();
         //checkAutoState();
         control();
 
@@ -222,7 +222,7 @@ public class Control extends AppCompatActivity implements IPreferenceConstants {
 
     }
 
-    private void enableAutoOnGps(){
+/*    private void enableAutoOnGps(){
 
         mAutoGps.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -275,7 +275,7 @@ public class Control extends AppCompatActivity implements IPreferenceConstants {
 
             }
         });
-    }
+    }*/
 
     private void control(){
         //TODO
@@ -285,7 +285,7 @@ public class Control extends AppCompatActivity implements IPreferenceConstants {
             public void onClick(View v) {
                 initTemp = initTemp + 1;
                 if(initTemp >= 30) {
-                    initTemp = 30L;
+                    initTemp = maxSetting;
                 }
                 mDatabaseReference.child(childlist.get(0)).child(childlist.get(1)).child("Temperature").setValue(initTemp);
             }
@@ -296,7 +296,7 @@ public class Control extends AppCompatActivity implements IPreferenceConstants {
             public void onClick(View v) {
                 initTemp = initTemp - 1;
                 if(initTemp <= 16){
-                    initTemp = 16L;
+                    initTemp = minSetting;
                 }
                 mDatabaseReference.child(childlist.get(0)).child(childlist.get(1)).child("Temperature").setValue(initTemp);
             }
