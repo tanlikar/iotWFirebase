@@ -59,7 +59,7 @@ public class Control extends AppCompatActivity implements IPreferenceConstants {
         setContentView(R.layout.activity_control_new);
 
         mPowerButton = (Button) findViewById(R.id.power_button);
-        mAutoGps = (Switch) findViewById(R.id.AutoGpsButton);
+        //mAutoGps = (Switch) findViewById(R.id.AutoGpsButton);
         mUpButton = (Button) findViewById(R.id.up_button);
         mDownButton = (Button) findViewById(R.id.down_button);
         mTextView = (TextView) findViewById(R.id.control_dis);
