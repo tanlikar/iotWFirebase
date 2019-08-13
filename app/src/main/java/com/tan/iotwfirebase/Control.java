@@ -37,7 +37,7 @@ public class Control extends AppCompatActivity implements IPreferenceConstants {
   //  Switch mAutoPmv;
     Switch mSleep;
     Switch mSwing;
-    Switch mAmbient;
+    //Switch mAmbient;
     Button mUpButton, mDownButton, mPowerButton;
     TextView mTextView;
     Spinner spinner_fan;
@@ -68,7 +68,7 @@ public class Control extends AppCompatActivity implements IPreferenceConstants {
         //mAutoPmv = (Switch) findViewById(R.id.autoPMV);
         mSwing = (Switch) findViewById(R.id.switch_swing);
         mSleep = (Switch) findViewById(R.id.switch_sleep);
-        mAmbient = (Switch) findViewById(R.id.switch_ambient);
+        //mAmbient = (Switch) findViewById(R.id.switch_ambient);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_activity_control);
         setSupportActionBar(toolbar);
@@ -369,27 +369,27 @@ public class Control extends AppCompatActivity implements IPreferenceConstants {
             }
         });
 
-        mDatabaseReference.child(childlist.get(0)).child(childlist.get(1)).child("Ambient").addValueEventListener(new ValueEventListener() {
-            @SuppressLint("SetTextI18n")
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-
-                if(dataSnapshot.exists()) {
-                    Long initAmbient =  (Long) dataSnapshot.getValue();
-                    if(initAmbient == 1) {
-                        mAmbient.setChecked(true);
-
-                    }else if(initAmbient == 0){
-                        mAmbient.setChecked(false);
-                    }
-                }
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
+//        mDatabaseReference.child(childlist.get(0)).child(childlist.get(1)).child("Ambient").addValueEventListener(new ValueEventListener() {
+//            @SuppressLint("SetTextI18n")
+//            @Override
+//            public void onDataChange(DataSnapshot dataSnapshot) {
+//
+//                if(dataSnapshot.exists()) {
+//                    Long initAmbient =  (Long) dataSnapshot.getValue();
+//                    if(initAmbient == 1) {
+//                        mAmbient.setChecked(true);
+//
+//                    }else if(initAmbient == 0){
+//                        mAmbient.setChecked(false);
+//                    }
+//                }
+//            }
+//
+//            @Override
+//            public void onCancelled(DatabaseError databaseError) {
+//
+//            }
+//        });
     }
 
     private void setSleep(){
@@ -438,27 +438,27 @@ public class Control extends AppCompatActivity implements IPreferenceConstants {
             }
         });
 
-        mAmbient.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if(isChecked){
-
-                    try {
-                        mDatabaseReference.child(childlist.get(0)).child(childlist.get(1)).child("Ambient").setValue(1);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-
-                }else{
-
-                    try {
-                        mDatabaseReference.child(childlist.get(0)).child(childlist.get(1)).child("Ambient").setValue(0);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
-        });
+//        mAmbient.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+//            @Override
+//            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+//                if(isChecked){
+//
+//                    try {
+//                        mDatabaseReference.child(childlist.get(0)).child(childlist.get(1)).child("Ambient").setValue(1);
+//                    } catch (Exception e) {
+//                        e.printStackTrace();
+//                    }
+//
+//                }else{
+//
+//                    try {
+//                        mDatabaseReference.child(childlist.get(0)).child(childlist.get(1)).child("Ambient").setValue(0);
+//                    } catch (Exception e) {
+//                        e.printStackTrace();
+//                    }
+//                }
+//            }
+//        });
     }
 
 
