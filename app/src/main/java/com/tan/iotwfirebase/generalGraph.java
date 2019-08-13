@@ -73,8 +73,8 @@ public class generalGraph extends AppCompatActivity implements IPreferenceConsta
 
     private void update(){
 
-            generalQuery = mDatabaseReference.child(sensorlist.get(0)).child(sensorlist.get(1)).orderByChild("timestamp").limitToLast(720);
-            generalQuery.addChildEventListener(new ChildEventListener() {
+        generalQuery = mDatabaseReference.child(sensorlist.get(0)).child(sensorlist.get(1)).orderByChild("timestamp").limitToLast(720);
+        generalQuery.addChildEventListener(new ChildEventListener() {
             @SuppressLint("SetTextI18n")
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
@@ -83,37 +83,37 @@ public class generalGraph extends AppCompatActivity implements IPreferenceConsta
 
                     mData.add(dataSnapshot.getValue(generalData.class));
 
-                        switch (sensorlist.get(2)) {
-                            case TEMPCHILD:
-                                disGeneral.setText(String.format("%s°C", mData.get(mData.size() - 1).getData().toString()));
-                                break;
+                    switch (sensorlist.get(2)) {
+                        case TEMPCHILD:
+                            disGeneral.setText(String.format("%s°C", mData.get(mData.size() - 1).getData().toString()));
+                            break;
 
-                            case HUMICHILD:
-                                disGeneral.setText((mData.get(mData.size() - 1).getData().toString()) + " %");
-                                break;
+                        case HUMICHILD:
+                            disGeneral.setText((mData.get(mData.size() - 1).getData().toString()) + " %");
+                            break;
 
-                            case PM25CHILD:
-                                disGeneral.setText((mData.get(mData.size() - 1).getData().toString()) + " ug/m^3");
-                                break;
+                        case PM25CHILD:
+                            disGeneral.setText((mData.get(mData.size() - 1).getData().toString()) + " ug/m^3");
+                            break;
 
-                            case PM10CHILD:
-                                disGeneral.setText((mData.get(mData.size() - 1).getData().toString()) + " ug/m^3");
-                                break;
+                        case PM10CHILD:
+                            disGeneral.setText((mData.get(mData.size() - 1).getData().toString()) + " ug/m^3");
+                            break;
 
-                            case CO2CHILD:
-                                disGeneral.setText((mData.get(mData.size() - 1).getData().toString()) + " ppm");
-                                break;
+                        case CO2CHILD:
+                            disGeneral.setText((mData.get(mData.size() - 1).getData().toString()) + " ppm");
+                            break;
 
-                            case CO2eCHILD:
-                                disGeneral.setText((mData.get(mData.size() - 1).getData().toString()) + " ppm");
-                                break;
+                        case CO2eCHILD:
+                            disGeneral.setText((mData.get(mData.size() - 1).getData().toString()) + " ppm");
+                            break;
 
-                            case VOCCHILD:
-                                disGeneral.setText((mData.get(mData.size() - 1).getData().toString()) + " ppb");
-                                break;
+                        case VOCCHILD:
+                            disGeneral.setText((mData.get(mData.size() - 1).getData().toString()) + " ppb");
+                            break;
 
 
-                        }
+                    }
 
 
                     //graphing

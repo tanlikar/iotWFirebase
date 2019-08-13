@@ -31,6 +31,8 @@ import java.util.Objects;
 
 public class Control extends AppCompatActivity implements IPreferenceConstants {
 
+    //TODO remove ambient
+
     Switch mAutoGps;
   //  Switch mAutoPmv;
     Switch mSleep;

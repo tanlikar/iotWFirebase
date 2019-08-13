@@ -68,7 +68,7 @@ public class sensor_select extends AppCompatActivity implements IPreferenceConst
                 ArrayList<String> childList = new ArrayList<>();
                 childList.add(groupNum);
 
-               String[] split = parent.getItemAtPosition(position).toString().split(" ");
+                String[] split = parent.getItemAtPosition(position).toString().split(" ");
 
                 switch (split[0]) {
                     case TEMPCHILD:
